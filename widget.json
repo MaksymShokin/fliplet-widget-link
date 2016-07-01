@@ -15,6 +15,7 @@
   },
   "build": {
     "dependencies": [
+      "jquery",
       "bootstrap"
     ],
     "assets": [
