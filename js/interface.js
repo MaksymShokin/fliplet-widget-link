@@ -4,10 +4,10 @@ $('form').submit(function (event) {
   var label = $('input[name="label"]').val();
   var style = $('select[name="style"]').val();
 
-  Fliplet.saveWidgetData({
+  Fliplet.Widget.save({
     label: label,
     style: style
   }).then(function () {
-    Fliplet.complete();
+    Fliplet.Widget.complete();
   });
 });
