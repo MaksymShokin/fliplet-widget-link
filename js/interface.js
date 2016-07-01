@@ -22,7 +22,16 @@ $('form').submit(function (event) {
 
   var data = {};
 
-  ['label', 'style', 'action', 'url', 'page'].forEach(function (field) {
+  [
+    'label',
+    'style',
+    'action',
+    'url',
+    'page',
+    'popupTitle',
+    'popupMessage',
+    'popupDismissLabel'
+  ].forEach(function (field) {
     data[field] = $('[name="' + field + '"]').val();
   });
 

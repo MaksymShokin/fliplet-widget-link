@@ -22,6 +22,7 @@
             <option value="page">Display another screen</option>
             <option value="back">Go back to previous screen</option>
             <option value="url">Open a web page</option>
+            <option value="popup">Open a popup box</option>
           </select>
         </div>
         <section class="hidden" data-field="action" data-value="page">
@@ -40,6 +41,23 @@
           <div class="form-group">
             <label for="linkUrl">Web page</label>
             <input type="url" class="form-control" name="url" id="linkUrl" value="{{url}}" placeholder="http://example.org" />
+          </div>
+        </section>
+        <section class="hidden" data-field="action" data-value="popup">
+          <hr />
+          <h3>Open a popup box</h3>
+          <p>Display a message in a popup box.</p>
+          <div class="form-group">
+            <label for="linkPopupTitle">Title</label>
+            <input type="text" class="form-control" name="popupTitle" id="linkPopupTitle" value="{{popupTitle}}" />
+          </div>
+          <div class="form-group">
+            <label for="linkPopupMessage">Message</label>
+            <input type="text" class="form-control" name="popupMessage" id="linkPopupMessage" value="{{popupMessage}}" />
+          </div>
+          <div class="form-group">
+            <label for="linkPopupDismissLabel">Dismiss button label</label>
+            <input type="text" class="form-control" name="popupDismissLabel" id="linkPopupDismissLabel" value="{{popupDismissLabel}}" placeholder="OK" />
           </div>
         </section>
         <hr />

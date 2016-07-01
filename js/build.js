@@ -1,14 +1,16 @@
 $('[data-button]').click(function (event) {
   event.preventDefault();
   var $button = $(this),
-      $data = $button.closest('[data-action]');
+      data = window.widgetData;
 
-  switch ($data.data('action')) {
+  switch (data.action) {
     case 'back':
       alert('I will go back'); break;
     case 'page':
-      alert('I should navigate to page ' + $data.data('page')); break;
+      alert('I should navigate to page ' + data.page); break;
     case 'url':
-      window.open($data.data('url')); break;
+      window.open(data.url); break;
+    case 'popup':
+      alert(data.popupTitle + "\r\n\r\n" + data.popupMessage); break;
   }
 });
