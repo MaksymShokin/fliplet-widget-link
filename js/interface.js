@@ -1,4 +1,6 @@
 var $sections = $('section[data-field]');
+var widgetInstanceId = $('[data-widget-id]').data('widget-id');
+var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 
 // Update visible section on
 $('select[name="action"]').change(function () {
@@ -6,7 +8,7 @@ $('select[name="action"]').change(function () {
 });
 
 // Update fields values
-$('select[name="action"]').val(window.widgetData.action || '').change();
+$('select[name="action"]').val(widgetInstanceData.action).change();
 
 function updateVisibleSections (fieldName, fieldValue) {
   $sections.filter('[data-field="' + fieldName + '"]');
@@ -45,7 +47,7 @@ Fliplet.Pages.get().then(function (pages) {
   (pages || []).forEach(function (page) {
     $select.append(
       '<option value="' + page.id + '"' +
-      (window.widgetData.page === page.id.toString() ? ' selected' : '') +
+      (widgetInstanceData.page === page.id.toString() ? ' selected' : '') +
       '>' + page.title + '</option>'
     );
   });

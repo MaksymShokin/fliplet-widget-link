@@ -1,16 +1,17 @@
 $('[data-button]').click(function (event) {
   event.preventDefault();
   var $button = $(this),
-      data = window.widgetData;
+      id = $button.data('id'),
+      data = Fliplet.Widget.getData(id);
 
   switch (data.action) {
     case 'back':
-      alert('I will go back'); break;
+      return Fliplet.Navigate.back();
     case 'page':
-      alert('I should navigate to page ' + data.page); break;
+      return Fliplet.Navigate.page(data.page);
     case 'url':
-      window.open(data.url); break;
+      return Fliplet.Navigate.url(data.url);
     case 'popup':
-      alert(data.popupTitle + "\r\n\r\n" + data.popupMessage); break;
+      return Fliplet.Navigate.popup(data);
   }
 });
