@@ -5,11 +5,10 @@
   "icon": "img/icon.png",
   "interface": {
     "dependencies": [
-      "fliplet-core:1.0",
-      "bootstrap-css"
+      "fliplet-core",
+      "fliplet-studio-ui"
     ],
     "assets": [
-      "css/interface.css",
       "js/interface.js"
     ]
   },
