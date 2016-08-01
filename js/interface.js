@@ -1,22 +1,18 @@
-var $sections = $('section[data-field]');
 var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 
-// Update visible section on
-$('select[name="action"]').change(function () {
-  updateVisibleSections('action', $(this).val());
+$('#link-type').on('change', function onLinkTypeChange() {
+  var selectedValue = $(this).val();
+  var selectedText = $(this).find("option:selected").text();
+  $('.section.show').removeClass('show');
+  $('#' + selectedValue + 'Section').addClass('show');
+  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 });
 
-// Update fields values
-$('select[name="action"]').val(widgetInstanceData.action).change();
-
-function updateVisibleSections (fieldName, fieldValue) {
-  $sections.filter('[data-field="' + fieldName + '"]');
-  $sections.each(function () {
-    var $section = $(this);
-    $section.toggleClass('hidden', $section.data('value') !== fieldValue);
-  });
-}
+$('#transition').on('change', function onTransitionListChange() {
+  var selectedText = $(this).find("option:selected").text();
+  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+});
 
 // Save data when submitting the form
 $('form').submit(function (event) {
@@ -25,16 +21,13 @@ $('form').submit(function (event) {
   var data = {};
 
   [
-    'label',
-    'style',
     'action',
-    'url',
     'page',
-    'popupTitle',
-    'popupMessage',
-    'popupDismissLabel'
-  ].forEach(function (field) {
-    data[field] = $('[name="' + field + '"]').val();
+    'document',
+    'transition',
+    'url'
+  ].forEach(function (fieldId) {
+    data[field] = $('"' + fieldId).val();
   });
 
   Fliplet.Widget.save(data).then(function () {
@@ -43,7 +36,7 @@ $('form').submit(function (event) {
 });
 
 Fliplet.Pages.get().then(function (pages) {
-  $select = $('select[name="page"]');
+  $select = $('#page');
   (pages || []).forEach(function (page) {
     $select.append(
       '<option value="' + page.id + '"' +
