@@ -9,6 +9,11 @@ $('#link-type').on('change', function onLinkTypeChange() {
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 });
 
+$('#page').on('change', function onScreenListChange() {
+  var selectedText = $(this).find("option:selected").text();
+  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+});
+
 $('#transition').on('change', function onTransitionListChange() {
   var selectedText = $(this).find("option:selected").text();
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);

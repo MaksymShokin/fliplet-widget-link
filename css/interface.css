@@ -4,6 +4,10 @@
     display: none;
 }
 
+#link-action {
+  overflow: hidden;
+}
+
 .section h2 small {
     color: #14505e;
 }
