@@ -1,7 +1,7 @@
 var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 
-$('#link-type').on('change', function onLinkTypeChange() {
+$('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   var selectedText = $(this).find("option:selected").text();
   $('.section.show').removeClass('show');
