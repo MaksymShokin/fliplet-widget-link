@@ -54,6 +54,14 @@ label {
     border-left: 1px solid #e4e9eb;
 }
 
+.select-value-proxy {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  display: block;
+}
+
 .form-control {
     border-radius: 6px;
     border: 1px solid #e4e9eb;
