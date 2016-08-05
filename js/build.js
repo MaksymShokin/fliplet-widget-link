@@ -11,7 +11,5 @@ $('[data-button]').click(function (event) {
       return Fliplet.Navigate.page(data.page);
     case 'url':
       return Fliplet.Navigate.url(data.url);
-    case 'popup':
-      return Fliplet.Navigate.popup(data);
   }
 });
