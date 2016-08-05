@@ -19,6 +19,11 @@ $('#transition').on('change', function onTransitionListChange() {
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 });
 
+// Fired from Fliplet Studio when the external save button is clicked
+Fliplet.Widget.onSaveRequest(function () {
+  $('form').submit();
+});
+
 // Save data when submitting the form
 $('form').submit(function (event) {
   event.preventDefault();
