@@ -17,11 +17,8 @@
   },
   "build": {
     "dependencies": [
-      "fliplet-core",
       "fliplet-navigate"
     ],
-    "assets": [
-      "js/build.js"
-    ]
+    "assets": []
   }
 }

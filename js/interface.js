@@ -37,7 +37,7 @@ $('form').submit(function (event) {
     'transition',
     'url'
   ].forEach(function (fieldId) {
-    data[field] = $('"' + fieldId).val();
+    data[fieldId] = $('#' + fieldId).val();
   });
 
   Fliplet.Widget.save(data).then(function () {
