@@ -12,6 +12,11 @@
     color: #14505e;
 }
 
+.control-label {
+  text-align: right;
+  padding-top: 12px;
+}
+
 label {
     font-weight: normal;
     color: #14505e;
@@ -97,10 +102,4 @@ label {
     color: #FFF;
     background-color: #0087a6;
     border-color: #0087a6;
-}
-
-@media (min-width: 768px) {
-    .form-horizontal .control-label {
-        padding-top: 13px;
-    }
 }
