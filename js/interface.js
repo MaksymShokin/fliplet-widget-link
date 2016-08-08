@@ -1,6 +1,14 @@
 var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 
+var fields = [
+  'action',
+  'page',
+  'document',
+  'transition',
+  'url'
+];
+
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   var selectedText = $(this).find("option:selected").text();
@@ -30,13 +38,7 @@ $('form').submit(function (event) {
 
   var data = {};
 
-  [
-    'action',
-    'page',
-    'document',
-    'transition',
-    'url'
-  ].forEach(function (fieldId) {
+  fields.forEach(function (fieldId) {
     data[fieldId] = $('#' + fieldId).val();
   });
 
@@ -45,13 +47,24 @@ $('form').submit(function (event) {
   });
 });
 
-Fliplet.Pages.get().then(function (pages) {
-  $select = $('#page');
-  (pages || []).forEach(function (page) {
-    $select.append(
-      '<option value="' + page.id + '"' +
-      (widgetInstanceData.page === page.id.toString() ? ' selected' : '') +
-      '>' + page.title + '</option>'
-    );
-  });
-});
+function initialiseData() {
+  if (widgetInstanceData.action) {
+    fields.forEach(function (fieldId) {
+      $('#' + fieldId).val(widgetInstanceData[fieldId]).change();
+    });
+  }
+}
+Fliplet.Pages.get()
+  .then(function (pages) {
+    $select = $('#page');
+    (pages || []).forEach(function (page) {
+      $select.append(
+        '<option value="' + page.id + '"' +
+        (widgetInstanceData.page === page.id.toString() ? ' selected' : '') +
+        '>' + page.title + '</option>'
+      );
+    });
+
+    return Promise.resolve();
+  })
+  .then(initialiseData);
