@@ -54,9 +54,10 @@ function initialiseData() {
     });
   }
 }
+
 Fliplet.Pages.get()
   .then(function (pages) {
-    $select = $('#page');
+    var $select = $('#page');
     (pages || []).forEach(function (page) {
       $select.append(
         '<option value="' + page.id + '"' +
