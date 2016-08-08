@@ -1,4 +1,16 @@
 <form>
+
+  {{#if options.label}}
+    <div class="form-group clearfix">
+      <div class="col-xs-4 control-label">
+        <label for="linkLabel">Link label</label>
+      </div>
+      <div class="col-xs-8">
+        <input type="text" name="linkLabel" class="form-control" id="linkLabel" placeholder="Label" value="{{linkLabel}}" required />
+      </div>
+    </div>
+  {{/if}}
+
   <div class="form-horizontal" id="link-action">
     <div class="form-group">
       <div class="col-xs-4 control-label">

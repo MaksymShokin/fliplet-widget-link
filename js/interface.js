@@ -2,6 +2,7 @@ var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 
 var fields = [
+  'linkLabel',
   'action',
   'page',
   'document',
@@ -36,8 +37,13 @@ Fliplet.Widget.onSaveRequest(function () {
 $('form').submit(function (event) {
   event.preventDefault();
 
+  // Clean data to store the new saved values
   var data = {};
 
+  // Attach options from widgetInstanceData
+  data.options = widgetInstanceData.options;
+
+  // Get and save values to data
   fields.forEach(function (fieldId) {
     data[fieldId] = $('#' + fieldId).val();
   });
