@@ -53,13 +53,15 @@ $('form').submit(function (event) {
   });
 
   if (data.action === 'none') {
-    // TODO: replace with better alert
-    return alert('You need to select the link action');
+    return Fliplet.Widget.displayMessage({
+      text: 'You need to select the link action'
+    });
   }
 
   if (data.action === 'screen' && !data.page) {
-    // TODO: replace with better alert
-    return alert('You need to select a screen to display');
+    return Fliplet.Widget.displayMessage({
+      text: 'You need to select a screen to display'
+    });
   }
 
   Fliplet.Widget.save(data).then(function () {
