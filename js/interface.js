@@ -10,12 +10,16 @@ var fields = [
   'url'
 ];
 
+Fliplet.Widget.toggleSaveButton(false);
+
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   var selectedText = $(this).find("option:selected").text();
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+
+  Fliplet.Widget.toggleSaveButton(selectedValue !== 'none');
 });
 
 $('#page').on('change', function onScreenListChange() {
@@ -47,6 +51,18 @@ $('form').submit(function (event) {
   fields.forEach(function (fieldId) {
     data[fieldId] = $('#' + fieldId).val();
   });
+
+  if (data.action === 'none') {
+    return Fliplet.Widget.displayMessage({
+      text: 'You need to select the link action'
+    });
+  }
+
+  if (data.action === 'screen' && !data.page) {
+    return Fliplet.Widget.displayMessage({
+      text: 'You need to select a screen to display'
+    });
+  }
 
   Fliplet.Widget.save(data).then(function () {
     Fliplet.Widget.complete();
