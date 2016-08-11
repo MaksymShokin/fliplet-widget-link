@@ -10,7 +10,8 @@ var fields = [
   'url'
 ];
 
-Fliplet.Widget.toggleSaveButton(false);
+// Removed for now
+//Fliplet.Widget.toggleSaveButton(false);
 
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
@@ -19,7 +20,8 @@ $('#action').on('change', function onLinkTypeChange() {
   $('#' + selectedValue + 'Section').addClass('show');
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 
-  Fliplet.Widget.toggleSaveButton(selectedValue !== 'none');
+  // Removed for now
+  //Fliplet.Widget.toggleSaveButton(selectedValue !== 'none');
 });
 
 $('#page').on('change', function onScreenListChange() {
