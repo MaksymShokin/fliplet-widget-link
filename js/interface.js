@@ -16,13 +16,6 @@ $('#action').on('change', function onLinkTypeChange() {
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
-
-  if ( selectedValue !== 'none' ) {
-    Fliplet.Widget.emit('linkTypeSet', { set: true });
-  } else {
-    Fliplet.Widget.emit('linkTypeSet', { set: false });
-  }
-
 });
 
 $('#page').on('change', function onScreenListChange() {
