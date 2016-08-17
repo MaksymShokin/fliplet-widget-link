@@ -1,5 +1,6 @@
 var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
+var validInputEventName = 'interface-validate';
 
 var fields = [
   'linkLabel',
@@ -10,12 +11,20 @@ var fields = [
   'url'
 ];
 
+Fliplet.Widget.emit(validInputEventName, {
+  isValid: false
+});
+
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   var selectedText = $(this).find("option:selected").text();
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+
+  Fliplet.Widget.emit(validInputEventName, {
+    isValid: selectedValue !== 'none'
+  });
 });
 
 $('#page').on('change', function onScreenListChange() {
