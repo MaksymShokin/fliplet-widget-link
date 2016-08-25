@@ -25,6 +25,9 @@ $('#action').on('change', function onLinkTypeChange() {
   Fliplet.Widget.emit(validInputEventName, {
     isValid: selectedValue !== 'none'
   });
+
+  // Tells the parent widget this provider has changed its interface height
+  Fliplet.Widget.autosize();
 });
 
 $('#page').on('change', function onScreenListChange() {
