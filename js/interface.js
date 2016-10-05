@@ -60,6 +60,10 @@ $('form').submit(function (event) {
     data[fieldId] = $('#' + fieldId).val();
   });
 
+  if (data.url && !data.url.match(/^https?:\/\//)) {
+    data.url = 'http://' + data.url;
+  }
+
   Fliplet.Widget.save(data).then(function () {
     Fliplet.Widget.complete();
   });
