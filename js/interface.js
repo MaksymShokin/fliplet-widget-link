@@ -60,7 +60,7 @@ $('form').submit(function (event) {
     data[fieldId] = $('#' + fieldId).val();
   });
 
-  if (data.url && !data.url.match(/^https?:\/\//)) {
+  if (data.url && !data.url.match(/^https?:\/\//i)) {
     data.url = 'http://' + data.url;
   }
 
