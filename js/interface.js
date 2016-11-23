@@ -64,7 +64,7 @@ $('form').submit(function (event) {
   if (data.url && !data.url.match(/^[A-z]+:/i)) {
     data.url = 'http://' + data.url;
   }
-console.log(data);
+
   // TODO: validate query
 
   Fliplet.Widget.save(data).then(function () {
