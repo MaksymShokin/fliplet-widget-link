@@ -8,7 +8,8 @@ var fields = [
   'page',
   'document',
   'transition',
-  'url'
+  'url',
+  'query'
 ];
 
 Fliplet.Widget.emit(validInputEventName, {
@@ -40,6 +41,11 @@ $('#transition').on('change', function onTransitionListChange() {
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 });
 
+$('#add-query').on('click', function() {
+  $(this).addClass('hidden');
+  $(this).parents('#screen-form').addClass('show-query');
+});
+
 // Fired from Fliplet Studio when the external save button is clicked
 Fliplet.Widget.onSaveRequest(function () {
   $('form').submit();
@@ -64,9 +70,12 @@ $('form').submit(function (event) {
     data.url = 'http://' + data.url;
   }
 
+  // TODO: validate query
+
   Fliplet.Widget.save(data).then(function () {
     Fliplet.Widget.complete();
   });
+
 });
 
 function initialiseData() {
