@@ -41,6 +41,11 @@ $('#transition').on('change', function onTransitionListChange() {
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 });
 
+$('#add-query').on('click', function() {
+  $(this).addClass('hidden');
+  $(this).parents('#screen-form').addClass('show-query');
+});
+
 // Fired from Fliplet Studio when the external save button is clicked
 Fliplet.Widget.onSaveRequest(function () {
   $('form').submit();
