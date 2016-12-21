@@ -2,6 +2,7 @@ body {
     overflow: hidden;
 }
 
+#pinchToZoomSection,
 #documentSection,
 #screenSection,
 #urlSection {
@@ -137,4 +138,10 @@ label {
     -moz-transform: translate(0, 0);
     -o-transform: translate(0, 0);
     transform: translate(0, 0);
+}
+
+#image-manager iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }

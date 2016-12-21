@@ -2,6 +2,9 @@ var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 var validInputEventName = 'interface-validate';
 
+// Clean data to store the new saved values
+var data = {};
+
 var fields = [
   'linkLabel',
   'action',
@@ -11,6 +14,27 @@ var fields = [
   'url',
   'query'
 ];
+
+var imageProvider = Fliplet.Widget.open('com.fliplet.image-manager', {
+  // If provided, the iframe will be appended here,
+  // otherwise will be displayed as a full-size iframe overlay
+  data: widgetInstanceData.pinchToZoom,
+  selector: "#pinchToZoomSection",
+  single: true,
+  type: 'image',
+  // Events fired from the provider
+  onEvent: function (event, data) {}
+});
+
+imageProvider.then(function (result) {
+  data.pinchToZoom = result.data;
+  Fliplet.Widget.save(data)
+    .then(function () {
+      Fliplet.Widget.complete();
+    });
+});
+
+
 
 Fliplet.Widget.emit(validInputEventName, {
   isValid: false
@@ -55,9 +79,6 @@ Fliplet.Widget.onSaveRequest(function () {
 $('form').submit(function (event) {
   event.preventDefault();
 
-  // Clean data to store the new saved values
-  var data = {};
-
   // Attach options from widgetInstanceData
   data.options = widgetInstanceData.options;
 
@@ -66,16 +87,15 @@ $('form').submit(function (event) {
     data[fieldId] = $('#' + fieldId).val();
   });
 
+  // Fix url
   if (data.url && !data.url.match(/^[A-z]+:/i)) {
     data.url = 'http://' + data.url;
   }
 
+  // Get data from image provider
+  imageProvider.forwardSaveRequest();
+
   // TODO: validate query
-
-  Fliplet.Widget.save(data).then(function () {
-    Fliplet.Widget.complete();
-  });
-
 });
 
 function initialiseData() {
@@ -100,3 +120,7 @@ Fliplet.Pages.get()
     return Promise.resolve();
   })
   .then(initialiseData);
+
+Fliplet.Navigator.onReady().then(function () {
+  Fliplet.Widget.autosize();
+});
