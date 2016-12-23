@@ -15,35 +15,15 @@ var fields = [
   'query'
 ];
 
-var imageProvider = Fliplet.Widget.open('com.fliplet.image-manager', {
-  // If provided, the iframe will be appended here,
-  // otherwise will be displayed as a full-size iframe overlay
-  data: widgetInstanceData.pinchToZoom,
-  selector: "#pinchToZoomSection",
-  single: true,
-  type: 'image',
-  // Events fired from the provider
-  onEvent: function (event, data) {}
-});
-
-imageProvider.then(function (result) {
-  data.pinchToZoom = result.data;
-  Fliplet.Widget.save(data)
-    .then(function () {
-      Fliplet.Widget.complete();
-    });
-});
-
-
-
-Fliplet.Widget.emit(validInputEventName, {
-  isValid: false
-});
-
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   var selectedText = $(this).find("option:selected").text();
   $('.section.show').removeClass('show');
+
+  if (selectedValue === 'pinchToZoom') {
+    initImageProvider(data);
+  }
+
   $('#' + selectedValue + 'Section').addClass('show');
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 
@@ -92,10 +72,14 @@ $('form').submit(function (event) {
     data.url = 'http://' + data.url;
   }
 
-  // Get data from image provider
-  imageProvider.forwardSaveRequest();
-
-  // TODO: validate query
+  if (data.action === 'pinchToZoom' && imageProvider) {
+    imageProvider.forwardSaveRequest();
+  } else {
+    Fliplet.Widget.save(data)
+      .then(function () {
+        Fliplet.Widget.complete();
+      });
+  }
 });
 
 function initialiseData() {
@@ -122,5 +106,48 @@ Fliplet.Pages.get()
   .then(initialiseData);
 
 Fliplet.Navigator.onReady().then(function () {
-  Fliplet.Widget.autosize();
+
 });
+
+var imageProvider;
+function initImageProvider(data){
+  imageProvider = Fliplet.Widget.open('com.fliplet.image-manager', {
+    // Also send the data I have locally, so that
+    // the interface gets repopulated with the same stuff
+    data: widgetInstanceData.pinchToZoom || {},
+    // Events fired from the provider
+    onEvent: function (event, data) {
+      if (event === 'interface-validate') {
+        Fliplet.Widget.toggleSaveButton(data.isValid === true);
+      }
+    },
+    single: true,
+    type: 'image'
+  });
+  
+  Fliplet.Widget.toggleCancelButton(false);
+
+  window.addEventListener('message', function(event) {
+    if (event.data === 'cancel-button-pressed') {
+      Fliplet.Widget.toggleCancelButton(true);
+      imageProvider.close();
+    }
+  });
+
+  Fliplet.Studio.emit('widget-save-label-update', {
+    text: 'Select & Save'
+  });
+
+  imageProvider.then(function (result) {
+    if(result.data) {
+      data.pinchToZoom = result.data;
+      Fliplet.Widget.save(data)
+        .then(function () {
+          Fliplet.Widget.complete();
+        });
+    }
+    imageProvider = null;
+    Fliplet.Studio.emit('widget-save-label-reset');
+    return Promise.resolve();
+  });
+}
