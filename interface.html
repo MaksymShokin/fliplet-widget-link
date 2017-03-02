@@ -11,7 +11,7 @@
     </div>
   {{/if}}
 
-  <div id="link-action" {{#if options.hideAction}} style="display: none" {{/if}}>
+  <div id="link-action" {{#if options.hideAction}} class="hidden" {{/if}}>
     <div class="form-group">
       <div class="col-sm-4 control-label">
         <label for="action">Link action</label>
@@ -35,7 +35,9 @@
   </div>
 
   <div id="screenSection" class="section">
+    {{#unless options.hideAction}}
     <h2><small>Display another screen</small></h2>
+    {{/unless}}
     <div class="row">
       <div class="col-xs-12">
         <p>Link to an existing screen with a chosen animation</p>
