@@ -11,7 +11,7 @@
     </div>
   {{/if}}
 
-  <div id="link-action">
+  <div id="link-action" {{#if options.hideAction}} style="display: none" {{/if}}>
     <div class="form-group">
       <div class="col-sm-4 control-label">
         <label for="action">Link action</label>
