@@ -4,7 +4,8 @@ body {
 
 #documentSection,
 #screenSection,
-#urlSection {
+#urlSection,
+#videoSection {
     display: none;
 }
 
@@ -145,4 +146,26 @@ label {
     -moz-transform: translate(0, 0);
     -o-transform: translate(0, 0);
     transform: translate(0, 0);
+}
+
+.file-title {
+    display: inline-block;
+    margin-left: 10px;
+    height: 46px;
+    line-height: 46px;
+}
+
+.info-holder .btn-link {
+    margin-left: 10px;
+}
+
+.info-holder .btn-link.text-danger {
+    color: #E03629 !important;
+}
+
+.info-holder .btn-link.text-danger:active:focus,
+.info-holder .btn-link.text-danger:active:hover,
+.info-holder .btn-link.text-danger:focus,
+.info-holder .btn-link.text-danger:hover {
+    color: #a94442 !important;
 }

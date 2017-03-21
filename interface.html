@@ -27,6 +27,8 @@
             <option value="screen">Display another screen</option>
             <option value="back">Go back to previous screen</option>
             <option value="url">Open a web page</option>
+            <option value="document">Open a document</option>
+            <option value="video">Open a video</option>
             <!--<option value="document">Open an office/PDF</option>-->
           </select>
         </label>
@@ -120,6 +122,56 @@
       </div>
     </div>
   </div>
+
+  <div id="documentSection" class="section">
+  <h2><small>Open a document</small></h2>
+  <div class="row">
+    <div class="col-xs-12">
+      <p>Embed a link to a document, it will be displayed within your app.</p>
+    </div>
+  </div>
+  <div>
+    <div class="form-group">
+      <div class="col-sm-4 control-label">
+        <label for="add-document">Select a document</label>
+      </div>
+      <div class="col-sm-8">
+        <div class="file-holder ">
+          <div class="btn btn-default add-document">{{#unless docConf}}Browse your media library{{else}}Replace document{{/unless}}</div>
+          <div class="info-holder {{#unless videoConf}}hidden{{/unless}}">
+            <div class="file-title"><i class="fa fa-file" aria-hidden="true"></i> <span>{{docConf.title}}</span></div>
+            <div class="btn btn-link text-danger document-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="videoSection" class="section">
+  <h2><small>Open a video</small></h2>
+  <div class="row">
+    <div class="col-xs-12">
+      <p>Embed a link to a video, it will be displayed within your app using a video player.</p>
+    </div>
+  </div>
+  <div>
+    <div class="form-group">
+      <div class="col-sm-4 control-label">
+        <label for="add-document">Select a video</label>
+      </div>
+      <div class="col-sm-8">
+        <div class="file-holder">
+          <div class="btn btn-default add-video">{{#unless videoConf}}Browse your media library{{else}}Replace video{{/unless}}</div>
+          <div class="info-holder {{#unless videoConf}}hidden{{/unless}}">
+            <div class="file-title"><i class="fa fa-file-video-o" aria-hidden="true"></i> <span>{{videoConf.title}}</span></div>
+            <div class="btn btn-link text-danger video-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- HIDDEN FOR NOW
   <div id="documentSection" class="section">
