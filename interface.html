@@ -137,9 +137,9 @@
       </div>
       <div class="col-sm-8">
         <div class="file-holder ">
-          <div class="btn btn-default add-document">{{#unless docConf}}Browse your media library{{else}}Replace document{{/unless}}</div>
-          <div class="info-holder {{#unless videoConf}}hidden{{/unless}}">
-            <div class="file-title"><i class="fa fa-file" aria-hidden="true"></i> <span>{{docConf.title}}</span></div>
+          <div class="btn btn-default add-document">{{#unless CONFIGS.add-document.selectFiles}}Browse your media library{{else}}Replace document{{/unless}}</div>
+          <div class="info-holder {{#unless CONFIGS.add-document.selectFiles}}hidden{{/unless}}">
+            <div class="file-title"><i class="fa fa-file" aria-hidden="true"></i> <span>{{CONFIGS.add-document.selectFiles.0.name}}</span></div>
             <div class="btn btn-link text-danger document-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
           </div>
         </div>
@@ -162,9 +162,9 @@
       </div>
       <div class="col-sm-8">
         <div class="file-holder">
-          <div class="btn btn-default add-video">{{#unless videoConf}}Browse your media library{{else}}Replace video{{/unless}}</div>
-          <div class="info-holder {{#unless videoConf}}hidden{{/unless}}">
-            <div class="file-title"><i class="fa fa-file-video-o" aria-hidden="true"></i> <span>{{videoConf.title}}</span></div>
+          <div class="btn btn-default add-video">{{#unless CONFIGS.add-video.selectFiles}}Browse your media library{{else}}Replace video{{/unless}}</div>
+          <div class="info-holder {{#unless CONFIGS.add-video.selectFiles}}hidden{{/unless}}">
+            <div class="file-title"><i class="fa fa-file-video-o" aria-hidden="true"></i> <span>{{CONFIGS.add-video.selectFiles.0.name}}</span></div>
             <div class="btn btn-link text-danger video-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
           </div>
         </div>

@@ -12,6 +12,107 @@ var fields = [
   'query'
 ];
 
+var BTN_SELECTOR = {
+  BTN_SELECT_DOCUMENT: '.add-document',
+  BTN_SELECT_VIDEO: '.add-video'
+};
+
+var $FILEPICKER;
+var providerInstance;
+
+var currentMode = null;
+
+var CONFIGS = widgetInstanceData.CONFIGS || {
+  'add-document': {
+      selectFiles: [],
+      selectMultiple: false,
+      type: 'document',
+      fileExtension: ['PDF', 'DOC', 'DOCX', 'KEY', 'PPT', 'ODT', 'XLS', 'XLSX']
+  },
+  'add-video': {
+      selectFiles: [],
+      selectMultiple: false,
+      type: 'video',
+      fileExtension: ['MOV', 'MPEG4', 'MP4', 'AVI', 'WMV', 'FLV', '3GPP', 'WebM']
+  }
+};
+
+Object.keys(BTN_SELECTOR).forEach(function (key) {
+  var selector = BTN_SELECTOR[key];
+  var mode = selector.slice(1);
+  var config = CONFIGS[mode];
+
+  if (config.selectFiles.length > 0){
+    var $el = $(selector).parents('.file-picker-select').find('.result');
+    $el.text(JSON.stringify(config.selectFiles, null, 4));
+    $el.show();
+  }
+
+  $(selector).on('click', function (e) {
+    e.preventDefault();
+    Fliplet.Widget.autosize();
+
+    config.selector = '#file-picker';
+
+    Fliplet.Widget.toggleSaveButton(config.selectFiles.length > 0);
+    providerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
+      data: config,
+      onEvent: function (e, data) {
+        switch (e) {
+          case 'widget-rendered':
+            break;
+          case 'widget-set-info':
+            Fliplet.Widget.toggleSaveButton(!!data.length);
+            var msg = data.length ? data.length + ' files selected' : 'no selected files';
+            Fliplet.Widget.info(msg);
+            break;
+          default:
+            break;
+        }
+      }
+    });
+
+    providerInstance.then(function(data) {
+      Fliplet.Studio.emit('widget-save-label-update', {  text : 'Save & Close'   });
+      Fliplet.Widget.info('');
+      Fliplet.Widget.toggleCancelButton(true);
+      Fliplet.Widget.toggleSaveButton(true);
+      CONFIGS[mode].selectFiles = data.data;
+      providerInstance = null;
+    });
+  });
+});
+
+function beginAnimationFilePicker() {
+  Fliplet.Studio.emit('widget-save-label-update', {  text : 'Select'   });
+  Fliplet.Widget.toggleCancelButton(false);
+  var animProgress = 100;
+  var animInterval;
+  $FILEPICKER = $('iframe');
+
+  $FILEPICKER.show();
+
+  animInterval = setInterval(function () {
+    animProgress -= 2;
+    $FILEPICKER.css({left: animProgress + '%'});
+    if (animProgress == 0) {
+      clearInterval(animInterval);
+    }
+  }, 5);
+}
+
+window.addEventListener('message', function (event) {
+  if (event.data === 'cancel-button-pressed'){
+    if (!providerInstance) return;
+    providerInstance.close();
+    providerInstance = null;
+    Fliplet.Studio.emit('widget-save-label-update', {  text : 'Save & Close'   });
+    Fliplet.Widget.toggleCancelButton(true);
+    Fliplet.Widget.toggleSaveButton(true);
+    Fliplet.Widget.info('');
+  }
+});
+
 Fliplet.Widget.emit(validInputEventName, {
   isValid: false
 });
@@ -46,8 +147,11 @@ $('#add-query').on('click', function() {
   $(this).parents('#screen-form').addClass('show-query');
 });
 
-// Fired from Fliplet Studio when the external save button is clicked
 Fliplet.Widget.onSaveRequest(function () {
+  if (providerInstance) {
+    return providerInstance.forwardSaveRequest();
+  }
+
   $('form').submit();
 });
 
@@ -70,8 +174,9 @@ $('form').submit(function (event) {
     data.url = 'http://' + data.url;
   }
 
-  // TODO: validate query
+  data.CONFIGS = CONFIGS;
 
+  // TODO: validate query
   Fliplet.Widget.save(data).then(function () {
     Fliplet.Widget.complete();
   });
