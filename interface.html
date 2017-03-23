@@ -124,54 +124,54 @@
   </div>
 
   <div id="documentSection" class="section">
-  <h2><small>Open a document</small></h2>
-  <div class="row">
-    <div class="col-xs-12">
-      <p>Embed a link to a document, it will be displayed within your app.</p>
-    </div>
-  </div>
-  <div>
-    <div class="form-group">
-      <div class="col-sm-4 control-label">
-        <label for="add-document">Select a document</label>
+    <h2><small>Open a document</small></h2>
+    <div class="row">
+      <div class="col-xs-12">
+        <p>Embed a link to a document, it will be displayed within your app.</p>
       </div>
-      <div class="col-sm-8">
-        <div class="file-holder document">
-          <div class="btn btn-default add-document">{{#unless files.document.selectFiles.id}}Browse your media library{{else}}Replace document{{/unless}}</div>
-          <div class="info-holder {{#unless files.document.selectFiles.id}}hidden{{/unless}}">
-            <div class="file-title"><i class="fa fa-file" aria-hidden="true"></i> <span>{{files.document.selectFiles.name}}</span></div>
-            <div class="btn btn-link text-danger document-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
+    </div>
+    <div>
+      <div class="form-group">
+        <div class="col-sm-4 control-label">
+          <label for="add-document">Select a document</label>
+        </div>
+        <div class="col-sm-8">
+          <div class="file-holder document">
+            <div class="btn btn-default add-document">{{#unless files.document.selectFiles.id}}Browse your media library{{else}}Replace document{{/unless}}</div>
+            <div class="info-holder {{#unless files.document.selectFiles.id}}hidden{{/unless}}">
+              <div class="file-title"><i class="fa fa-file" aria-hidden="true"></i> <span>{{files.document.selectFiles.name}}</span></div>
+              <div class="btn btn-link text-danger document-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div id="videoSection" class="section">
-  <h2><small>Open a video</small></h2>
-  <div class="row">
-    <div class="col-xs-12">
-      <p>Embed a link to a video, it will be displayed within your app using a video player.</p>
-    </div>
-  </div>
-  <div>
-    <div class="form-group">
-      <div class="col-sm-4 control-label">
-        <label for="add-document">Select a video</label>
+  <div id="videoSection" class="section">
+    <h2><small>Open a video</small></h2>
+    <div class="row">
+      <div class="col-xs-12">
+        <p>Embed a link to a video, it will be displayed within your app using a video player.</p>
       </div>
-      <div class="col-sm-8">
-        <div class="file-holder video">
-          <div class="btn btn-default add-video">{{#unless files.video.selectFiles.id}}Browse your media library{{else}}Replace video{{/unless}}</div>
-          <div class="info-holder {{#unless files.video.selectFiles.id}}hidden{{/unless}}">
-            <div class="file-title"><i class="fa fa-file-video-o" aria-hidden="true"></i> <span>{{files.video.selectFiles.name}}</span></div>
-            <div class="btn btn-link text-danger video-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
+    </div>
+    <div>
+      <div class="form-group">
+        <div class="col-sm-4 control-label">
+          <label for="add-document">Select a video</label>
+        </div>
+        <div class="col-sm-8">
+          <div class="file-holder video">
+            <div class="btn btn-default add-video">{{#unless files.video.selectFiles.id}}Browse your media library{{else}}Replace video{{/unless}}</div>
+            <div class="info-holder {{#unless files.video.selectFiles.id}}hidden{{/unless}}">
+              <div class="file-title"><i class="fa fa-file-video-o" aria-hidden="true"></i> <span>{{files.video.selectFiles.name}}</span></div>
+              <div class="btn btn-link text-danger video-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- HIDDEN FOR NOW
   <div id="documentSection" class="section">
