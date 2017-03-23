@@ -6,53 +6,42 @@ var fields = [
   'linkLabel',
   'action',
   'page',
-  'document',
   'transition',
   'url',
   'query'
 ];
 
-var BTN_SELECTOR = {
-  BTN_SELECT_DOCUMENT: '.add-document',
-  BTN_SELECT_VIDEO: '.add-video'
+var btnSelector = {
+  document: '.add-document',
+  video: '.add-video'
 };
 
-var $FILEPICKER;
 var providerInstance;
 
 var currentMode = null;
 
-var CONFIGS = widgetInstanceData.CONFIGS || {
-  'add-document': {
-      selectFiles: [],
+var files = widgetInstanceData.files || {
+  'document': {
+      selectFiles: {},
       selectMultiple: false,
       type: 'document',
       fileExtension: ['PDF', 'DOC', 'DOCX', 'KEY', 'PPT', 'ODT', 'XLS', 'XLSX']
   },
-  'add-video': {
-      selectFiles: [],
+  'video': {
+      selectFiles: {},
       selectMultiple: false,
       type: 'video',
       fileExtension: ['MOV', 'MPEG4', 'MP4', 'AVI', 'WMV', 'FLV', '3GPP', 'WebM']
   }
 };
 
-Object.keys(BTN_SELECTOR).forEach(function (key) {
-  var selector = BTN_SELECTOR[key];
-  var mode = selector.slice(1);
-  var config = CONFIGS[mode];
-
-  if (config.selectFiles.length > 0){
-    var $el = $(selector).parents('.file-picker-select').find('.result');
-    $el.text(JSON.stringify(config.selectFiles, null, 4));
-    $el.show();
-  }
+Object.keys(btnSelector).forEach(function (key, index) {
+  var selector = btnSelector[key];
+  var mode = key;
+  var config = files[mode];
 
   $(selector).on('click', function (e) {
     e.preventDefault();
-    Fliplet.Widget.autosize();
-
-    config.selector = '#file-picker';
 
     Fliplet.Widget.toggleSaveButton(config.selectFiles.length > 0);
     providerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
@@ -77,29 +66,12 @@ Object.keys(BTN_SELECTOR).forEach(function (key) {
       Fliplet.Widget.info('');
       Fliplet.Widget.toggleCancelButton(true);
       Fliplet.Widget.toggleSaveButton(true);
-      CONFIGS[mode].selectFiles = data.data;
+      files[mode].selectFiles = data.data.length === 1 ? data.data[0] : data.data;
       providerInstance = null;
+      // TODO: Needs a way to refresh the link interface to change UI 
     });
   });
 });
-
-function beginAnimationFilePicker() {
-  Fliplet.Studio.emit('widget-save-label-update', {  text : 'Select'   });
-  Fliplet.Widget.toggleCancelButton(false);
-  var animProgress = 100;
-  var animInterval;
-  $FILEPICKER = $('iframe');
-
-  $FILEPICKER.show();
-
-  animInterval = setInterval(function () {
-    animProgress -= 2;
-    $FILEPICKER.css({left: animProgress + '%'});
-    if (animProgress == 0) {
-      clearInterval(animInterval);
-    }
-  }, 5);
-}
 
 window.addEventListener('message', function (event) {
   if (event.data === 'cancel-button-pressed'){
@@ -152,13 +124,11 @@ Fliplet.Widget.onSaveRequest(function () {
     return providerInstance.forwardSaveRequest();
   }
 
-  $('form').submit();
+  save(true);
 });
 
 // Save data when submitting the form
-$('form').submit(function (event) {
-  event.preventDefault();
-
+function save(notifyComplete) {
   // Clean data to store the new saved values
   var data = {};
 
@@ -174,14 +144,19 @@ $('form').submit(function (event) {
     data.url = 'http://' + data.url;
   }
 
-  data.CONFIGS = CONFIGS;
+  data.files = files;
 
-  // TODO: validate query
-  Fliplet.Widget.save(data).then(function () {
-    Fliplet.Widget.complete();
-  });
-
-});
+  if(notifyComplete) {
+    // TODO: validate query
+    Fliplet.Widget.save(data).then(function () {
+      Fliplet.Widget.complete();
+    });
+  } else {
+    Fliplet.Widget.save(data).then(function () {
+      Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
+    });
+  }
+}
 
 function initialiseData() {
   if (widgetInstanceData.action) {
