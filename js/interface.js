@@ -68,7 +68,17 @@ Object.keys(btnSelector).forEach(function (key, index) {
       Fliplet.Widget.toggleSaveButton(true);
       files[mode].selectFiles = data.data.length === 1 ? data.data[0] : data.data;
       providerInstance = null;
-      // TODO: Needs a way to refresh the link interface to change UI 
+      if (mode === 'document') {
+        $('.document .add-document').text('Replace document');
+        $('.document .info-holder').removeClass('hidden');
+        $('.document .file-title span').text(files[mode].selectFiles.name);
+        Fliplet.Widget.autosize();
+      } else if (mode === 'video') {
+        $('.video .add-video').text('Replace video');
+        $('.video .info-holder').removeClass('hidden');
+        $('.video .file-title span').text(files[mode].selectFiles.name);
+        Fliplet.Widget.autosize();
+      }
     });
   });
 });
@@ -119,6 +129,22 @@ $('#add-query').on('click', function() {
   $(this).parents('#screen-form').addClass('show-query');
 });
 
+$('.document-remove').on('click', function() {
+  files.document.selectFiles = {};
+  $('.document .add-document').text('Browse your media library');
+  $('.document .info-holder').addClass('hidden');
+  $('.document .file-title span').text('');
+  Fliplet.Widget.autosize();
+});
+
+$('.video-remove').on('click', function() {
+  files.video.selectFiles = {};
+  $('.video .add-video').text('Browse your media library');
+  $('.video .info-holder').addClass('hidden');
+  $('.video .file-title span').text('');
+  Fliplet.Widget.autosize();
+});
+
 Fliplet.Widget.onSaveRequest(function () {
   if (providerInstance) {
     return providerInstance.forwardSaveRequest();
@@ -153,7 +179,7 @@ function save(notifyComplete) {
     });
   } else {
     Fliplet.Widget.save(data).then(function () {
-      Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
+      //Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
     });
   }
 }
