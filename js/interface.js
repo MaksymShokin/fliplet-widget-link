@@ -24,14 +24,12 @@ var files = widgetInstanceData.files || {
   'document': {
       selectFiles: {},
       selectMultiple: false,
-      type: 'document',
-      fileExtension: ['PDF', 'DOC', 'DOCX', 'KEY', 'PPT', 'ODT', 'XLS', 'XLSX']
+      type: 'document'
   },
   'video': {
       selectFiles: {},
       selectMultiple: false,
-      type: 'video',
-      fileExtension: ['MOV', 'MPEG4', 'MP4', 'AVI', 'WMV', 'FLV', '3GPP', 'WebM']
+      type: 'video'
   }
 };
 
