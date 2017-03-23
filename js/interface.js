@@ -93,9 +93,9 @@ window.addEventListener('message', function (event) {
   }
 });
 
-Fliplet.Widget.emit(validInputEventName, {
+/*Fliplet.Widget.emit(validInputEventName, {
   isValid: false
-});
+});*/
 
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
@@ -104,9 +104,9 @@ $('#action').on('change', function onLinkTypeChange() {
   $('#' + selectedValue + 'Section').addClass('show');
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 
-  Fliplet.Widget.emit(validInputEventName, {
+  /*Fliplet.Widget.emit(validInputEventName, {
     isValid: selectedValue !== 'none'
-  });
+  });*/
 
   // Tells the parent widget this provider has changed its interface height
   Fliplet.Widget.autosize();
@@ -177,7 +177,7 @@ function save(notifyComplete) {
     });
   } else {
     Fliplet.Widget.save(data).then(function () {
-      //Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
+      Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
     });
   }
 }
