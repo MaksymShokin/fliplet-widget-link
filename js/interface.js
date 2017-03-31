@@ -21,27 +21,25 @@ var providerInstance;
 var currentMode = null;
 
 var files = widgetInstanceData.files || {
-  'document': {
-      selectFiles: {},
-      selectMultiple: false,
-      type: 'document'
-  },
-  'video': {
-      selectFiles: {},
-      selectMultiple: false,
-      type: 'video'
-  }
+  selectedFiles: {},
+  selectMultiple: false,
+  type: ''
 };
 
 Object.keys(btnSelector).forEach(function (key, index) {
   var selector = btnSelector[key];
-  var mode = key;
-  var config = files[mode];
+  var config = files;
 
   $(selector).on('click', function (e) {
     e.preventDefault();
 
-    Fliplet.Widget.toggleSaveButton(config.selectFiles.length > 0);
+    if ( $(this).hasClass('add-document') ) {
+      config.type = 'document'
+    } else if ( $(this).hasClass('add-video') ) {
+      config.type = 'video'
+    }
+
+    Fliplet.Widget.toggleSaveButton(config.selectedFiles.length > 0);
     providerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
       data: config,
       onEvent: function (e, data) {
@@ -64,17 +62,17 @@ Object.keys(btnSelector).forEach(function (key, index) {
       Fliplet.Widget.info('');
       Fliplet.Widget.toggleCancelButton(true);
       Fliplet.Widget.toggleSaveButton(true);
-      files[mode].selectFiles = data.data.length === 1 ? data.data[0] : data.data;
+      files.selectedFiles = data.data.length === 1 ? data.data[0] : data.data;
       providerInstance = null;
-      if (mode === 'document') {
+      if (key === 'document') {
         $('.document .add-document').text('Replace document');
         $('.document .info-holder').removeClass('hidden');
-        $('.document .file-title span').text(files[mode].selectFiles.name);
+        $('.document .file-title span').text(files.selectedFiles.name);
         Fliplet.Widget.autosize();
-      } else if (mode === 'video') {
+      } else if (key === 'video') {
         $('.video .add-video').text('Replace video');
         $('.video .info-holder').removeClass('hidden');
-        $('.video .file-title span').text(files[mode].selectFiles.name);
+        $('.video .file-title span').text(files.selectedFiles.name);
         Fliplet.Widget.autosize();
       }
     });
@@ -128,7 +126,7 @@ $('#add-query').on('click', function() {
 });
 
 $('.document-remove').on('click', function() {
-  files.document.selectFiles = {};
+  files.selectedFiles = {};
   $('.document .add-document').text('Browse your media library');
   $('.document .info-holder').addClass('hidden');
   $('.document .file-title span').text('');
@@ -136,7 +134,7 @@ $('.document-remove').on('click', function() {
 });
 
 $('.video-remove').on('click', function() {
-  files.video.selectFiles = {};
+  files.selectedFiles = {};
   $('.video .add-video').text('Browse your media library');
   $('.video .info-holder').addClass('hidden');
   $('.video .file-title span').text('');
@@ -168,7 +166,7 @@ function save(notifyComplete) {
     data.url = 'http://' + data.url;
   }
 
-  data.files = files;
+  data.files = files.selectedFiles;
 
   if(notifyComplete) {
     // TODO: validate query
