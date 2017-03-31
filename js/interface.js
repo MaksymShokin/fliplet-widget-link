@@ -6,15 +6,94 @@ var fields = [
   'linkLabel',
   'action',
   'page',
-  'document',
   'transition',
   'url',
   'query'
 ];
 
-Fliplet.Widget.emit(validInputEventName, {
-  isValid: false
+var btnSelector = {
+  document: '.add-document',
+  video: '.add-video'
+};
+
+var providerInstance;
+
+var currentMode = null;
+
+var files = widgetInstanceData.files || {
+  selectedFiles: {},
+  selectMultiple: false,
+  type: ''
+};
+
+Object.keys(btnSelector).forEach(function (key, index) {
+  var selector = btnSelector[key];
+  var config = files;
+
+  $(selector).on('click', function (e) {
+    e.preventDefault();
+
+    if ( $(this).hasClass('add-document') ) {
+      config.type = 'document'
+    } else if ( $(this).hasClass('add-video') ) {
+      config.type = 'video'
+    }
+
+    Fliplet.Widget.toggleSaveButton(config.selectedFiles.length > 0);
+    providerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
+      data: config,
+      onEvent: function (e, data) {
+        switch (e) {
+          case 'widget-rendered':
+            break;
+          case 'widget-set-info':
+            Fliplet.Widget.toggleSaveButton(!!data.length);
+            var msg = data.length ? data.length + ' files selected' : 'no selected files';
+            Fliplet.Widget.info(msg);
+            break;
+          default:
+            break;
+        }
+      }
+    });
+
+    providerInstance.then(function(data) {
+      Fliplet.Studio.emit('widget-save-label-update', {  text : 'Save & Close'   });
+      Fliplet.Widget.info('');
+      Fliplet.Widget.toggleCancelButton(true);
+      Fliplet.Widget.toggleSaveButton(true);
+      files.selectedFiles = data.data.length === 1 ? data.data[0] : data.data;
+      providerInstance = null;
+      if (key === 'document') {
+        $('.document .add-document').text('Replace document');
+        $('.document .info-holder').removeClass('hidden');
+        $('.document .file-title span').text(files.selectedFiles.name);
+        Fliplet.Widget.autosize();
+      } else if (key === 'video') {
+        $('.video .add-video').text('Replace video');
+        $('.video .info-holder').removeClass('hidden');
+        $('.video .file-title span').text(files.selectedFiles.name);
+        Fliplet.Widget.autosize();
+      }
+    });
+  });
 });
+
+window.addEventListener('message', function (event) {
+  if (event.data === 'cancel-button-pressed'){
+    if (!providerInstance) return;
+    providerInstance.close();
+    providerInstance = null;
+    Fliplet.Studio.emit('widget-save-label-update', {  text : 'Save & Close'   });
+    Fliplet.Widget.toggleCancelButton(true);
+    Fliplet.Widget.toggleSaveButton(true);
+    Fliplet.Widget.info('');
+  }
+});
+
+/*Fliplet.Widget.emit(validInputEventName, {
+  isValid: false
+});*/
 
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
@@ -23,9 +102,9 @@ $('#action').on('change', function onLinkTypeChange() {
   $('#' + selectedValue + 'Section').addClass('show');
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 
-  Fliplet.Widget.emit(validInputEventName, {
+  /*Fliplet.Widget.emit(validInputEventName, {
     isValid: selectedValue !== 'none'
-  });
+  });*/
 
   // Tells the parent widget this provider has changed its interface height
   Fliplet.Widget.autosize();
@@ -46,15 +125,32 @@ $('#add-query').on('click', function() {
   $(this).parents('#screen-form').addClass('show-query');
 });
 
-// Fired from Fliplet Studio when the external save button is clicked
+$('.document-remove').on('click', function() {
+  files.selectedFiles = {};
+  $('.document .add-document').text('Browse your media library');
+  $('.document .info-holder').addClass('hidden');
+  $('.document .file-title span').text('');
+  Fliplet.Widget.autosize();
+});
+
+$('.video-remove').on('click', function() {
+  files.selectedFiles = {};
+  $('.video .add-video').text('Browse your media library');
+  $('.video .info-holder').addClass('hidden');
+  $('.video .file-title span').text('');
+  Fliplet.Widget.autosize();
+});
+
 Fliplet.Widget.onSaveRequest(function () {
-  $('form').submit();
+  if (providerInstance) {
+    return providerInstance.forwardSaveRequest();
+  }
+
+  save(true);
 });
 
 // Save data when submitting the form
-$('form').submit(function (event) {
-  event.preventDefault();
-
+function save(notifyComplete) {
   // Clean data to store the new saved values
   var data = {};
 
@@ -70,13 +166,19 @@ $('form').submit(function (event) {
     data.url = 'http://' + data.url;
   }
 
-  // TODO: validate query
+  data.files = files.selectedFiles;
 
-  Fliplet.Widget.save(data).then(function () {
-    Fliplet.Widget.complete();
-  });
-
-});
+  if(notifyComplete) {
+    // TODO: validate query
+    Fliplet.Widget.save(data).then(function () {
+      Fliplet.Widget.complete();
+    });
+  } else {
+    Fliplet.Widget.save(data).then(function () {
+      Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
+    });
+  }
+}
 
 function initialiseData() {
   if (widgetInstanceData.action) {
