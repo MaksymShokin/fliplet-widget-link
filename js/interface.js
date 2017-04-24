@@ -26,23 +26,23 @@ var files = widgetInstanceData.files || {
   type: ''
 };
 
-Object.keys(btnSelector).forEach(function (key, index) {
+Object.keys(btnSelector).forEach(function(key, index) {
   var selector = btnSelector[key];
   var config = files;
 
-  $(selector).on('click', function (e) {
+  $(selector).on('click', function(e) {
     e.preventDefault();
 
-    if ( $(this).hasClass('add-document') ) {
+    if ($(this).hasClass('add-document')) {
       config.type = 'document'
-    } else if ( $(this).hasClass('add-video') ) {
+    } else if ($(this).hasClass('add-video')) {
       config.type = 'video'
     }
 
-    Fliplet.Widget.toggleSaveButton(config.selectedFiles.length > 0);
+    Fliplet.Widget.toggleSaveButton(Object.keys(config.selectedFiles).length > 0);
     providerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
       data: config,
-      onEvent: function (e, data) {
+      onEvent: function(e, data) {
         switch (e) {
           case 'widget-rendered':
             break;
@@ -58,7 +58,9 @@ Object.keys(btnSelector).forEach(function (key, index) {
     });
 
     providerInstance.then(function(data) {
-      Fliplet.Studio.emit('widget-save-label-update', {  text : 'Save & Close'   });
+      Fliplet.Studio.emit('widget-save-label-update', {
+        text: 'Save & Close'
+      });
       Fliplet.Widget.info('');
       Fliplet.Widget.toggleCancelButton(true);
       Fliplet.Widget.toggleSaveButton(true);
@@ -79,12 +81,14 @@ Object.keys(btnSelector).forEach(function (key, index) {
   });
 });
 
-window.addEventListener('message', function (event) {
-  if (event.data === 'cancel-button-pressed'){
+window.addEventListener('message', function(event) {
+  if (event.data === 'cancel-button-pressed') {
     if (!providerInstance) return;
     providerInstance.close();
     providerInstance = null;
-    Fliplet.Studio.emit('widget-save-label-update', {  text : 'Save & Close'   });
+    Fliplet.Studio.emit('widget-save-label-update', {
+      text: 'Save & Close'
+    });
     Fliplet.Widget.toggleCancelButton(true);
     Fliplet.Widget.toggleSaveButton(true);
     Fliplet.Widget.info('');
@@ -141,7 +145,7 @@ $('.video-remove').on('click', function() {
   Fliplet.Widget.autosize();
 });
 
-Fliplet.Widget.onSaveRequest(function () {
+Fliplet.Widget.onSaveRequest(function() {
   if (providerInstance) {
     return providerInstance.forwardSaveRequest();
   }
@@ -158,7 +162,7 @@ function save(notifyComplete) {
   data.options = widgetInstanceData.options;
 
   // Get and save values to data
-  fields.forEach(function (fieldId) {
+  fields.forEach(function(fieldId) {
     data[fieldId] = $('#' + fieldId).val();
   });
 
@@ -168,13 +172,13 @@ function save(notifyComplete) {
 
   data.files = files.selectedFiles;
 
-  if(notifyComplete) {
+  if (notifyComplete) {
     // TODO: validate query
-    Fliplet.Widget.save(data).then(function () {
+    Fliplet.Widget.save(data).then(function() {
       Fliplet.Widget.complete();
     });
   } else {
-    Fliplet.Widget.save(data).then(function () {
+    Fliplet.Widget.save(data).then(function() {
       Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
     });
   }
@@ -182,16 +186,16 @@ function save(notifyComplete) {
 
 function initialiseData() {
   if (widgetInstanceData.action) {
-    fields.forEach(function (fieldId) {
+    fields.forEach(function(fieldId) {
       $('#' + fieldId).val(widgetInstanceData[fieldId]).change();
     });
   }
 }
 
 Fliplet.Pages.get()
-  .then(function (pages) {
+  .then(function(pages) {
     var $select = $('#page');
-    (pages || []).forEach(function (page) {
+    (pages || []).forEach(function(page) {
       $select.append(
         '<option value="' + page.id + '"' +
         (widgetInstanceData.page === page.id.toString() ? ' selected' : '') +
