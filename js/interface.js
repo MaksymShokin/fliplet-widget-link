@@ -17,14 +17,12 @@ var btnSelector = {
 };
 
 var providerInstance;
-
 var currentMode = null;
-
-var files = widgetInstanceData.files || {
+var files = $.extend(widgetInstanceData.files, {
   selectedFiles: {},
   selectMultiple: false,
   type: ''
-};
+});
 
 Object.keys(btnSelector).forEach(function(key, index) {
   var selector = btnSelector[key];
