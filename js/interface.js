@@ -168,7 +168,7 @@ function save(notifyComplete) {
     data.url = 'http://' + data.url;
   }
 
-  data.files = files.selectedFiles;
+  data.files = files.name ? files : files.selectedFiles;
 
   if (notifyComplete) {
     // TODO: validate query
