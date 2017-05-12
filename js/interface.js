@@ -38,6 +38,11 @@ Object.keys(btnSelector).forEach(function(key, index) {
     }
 
     Fliplet.Widget.toggleSaveButton(Object.keys(config.selectedFiles).length > 0);
+
+    Fliplet.Studio.emit('widget-save-label-update', {
+      text: 'Save'
+    });
+
     providerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
       data: config,
       onEvent: function(e, data) {
