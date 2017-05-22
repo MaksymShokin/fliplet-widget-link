@@ -102,6 +102,8 @@ window.addEventListener('message', function(event) {
   isValid: false
 });*/
 
+$(window).on('resize', Fliplet.Widget.autosize);
+
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   var selectedText = $(this).find("option:selected").text();
@@ -130,6 +132,13 @@ $('#transition').on('change', function onTransitionListChange() {
 $('#add-query').on('click', function() {
   $(this).addClass('hidden');
   $(this).parents('#screen-form').addClass('show-query');
+  Fliplet.Widget.autosize();
+});
+
+$('#query').on('change', function() {
+  if ($(this).val() !== '') {
+    $('#add-query').trigger('click');
+  }
 });
 
 $('.document-remove').on('click', function() {
@@ -191,6 +200,7 @@ function initialiseData() {
   if (widgetInstanceData.action) {
     fields.forEach(function(fieldId) {
       $('#' + fieldId).val(widgetInstanceData[fieldId]).change();
+      Fliplet.Widget.autosize();
     });
   }
 }
