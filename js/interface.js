@@ -102,6 +102,8 @@ window.addEventListener('message', function(event) {
   isValid: false
 });*/
 
+$(window).on('resize', Fliplet.Widget.autosize);
+
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   var selectedText = $(this).find("option:selected").text();
