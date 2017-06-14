@@ -1,14 +1,14 @@
 <form class="form-horizontal">
 
   {{#if options.label}}
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label for="linkLabel">Link label</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="text" name="linkLabel" class="form-control" id="linkLabel" placeholder="Label" value="{{linkLabel}}" required />
-      </div>
+  <div class="form-group clearfix">
+    <div class="col-sm-4 control-label">
+      <label for="linkLabel">Link label</label>
     </div>
+    <div class="col-sm-8">
+      <input type="text" name="linkLabel" class="form-control" id="linkLabel" placeholder="Label" value="{{linkLabel}}" required />
+    </div>
+  </div>
   {{/if}}
 
   <div id="link-action" {{#if options.hideAction}} class="hidden" {{/if}}>
@@ -20,17 +20,16 @@
 
         <label for="action" class="select-proxy-display">
           <span class="icon fa fa-chevron-down"></span>
-          <span class="select-value-proxy">&mdash;Select a link action&mdash;</span>
+          <span class="select-value-proxy">None</span>
 
           <select name="link_type" id="action" data-label="select" class="hidden-select form-control">
-            <option selected value="none">&mdash;Select a link action&mdash;</option>
+            <option value="none">None</option>
             <option value="screen">Display another screen</option>
             <option value="back">Go back to previous screen</option>
             <option value="url">Open a web page</option>
             <option value="document">Open a document</option>
             <option value="video">Play a video</option>
             <option value="about-overlay">Open the about this app overlay</option>
-            <!--<option value="document">Open an office/PDF</option>-->
           </select>
         </label>
       </div>
@@ -38,9 +37,6 @@
   </div>
 
   <div id="screenSection" class="section">
-    {{#unless options.hideAction}}
-    <h2><small>Display another screen</small></h2>
-    {{/unless}}
     <div class="row">
       <div class="col-xs-12">
         <p>Link to an existing screen with a chosen animation</p>
@@ -67,7 +63,7 @@
           <label for="query">Add query parameters</label>
         </div>
         <div class="col-sm-8">
-          <input type="text" class="form-control" name="query" id="query" placeholder="Enter query (e.g. ?variable1=value1&variable2=value2)"/>
+          <input type="text" class="form-control" name="query" id="query" placeholder="Enter query (e.g. ?variable1=value1&variable2=value2)" />
           <p class="help-block">This needs to be URL encoded - <a target="_blank" href="http://meyerweb.com/eric/tools/dencoder/">URL encoding tool</a></p>
         </div>
       </div>
@@ -104,9 +100,6 @@
   </div>
 
   <div id="urlSection" class="section">
-    {{#unless options.hideAction}}
-    <h2><small>Open a web page</small></h2>
-    {{/unless}}
     <div class="row">
       <div class="col-xs-12">
         <p>The web page will be displayed within your app.</p>
@@ -125,7 +118,6 @@
   </div>
 
   <div id="documentSection" class="section">
-    <h2><small>Open a document</small></h2>
     <div class="row">
       <div class="col-xs-12">
         <p>Embed a link to a document, it will be displayed within your app.</p>
@@ -150,7 +142,6 @@
   </div>
 
   <div id="videoSection" class="section">
-    <h2><small>Play a video</small></h2>
     <div class="row">
       <div class="col-xs-12">
         <p>Embed a link to a video, it will be displayed within your app using a video player.</p>
@@ -173,25 +164,4 @@
       </div>
     </div>
   </div>
-
-  <!-- HIDDEN FOR NOW
-  <div id="documentSection" class="section">
-    <h2><small>Open a document</small></h2>
-    <div class="row">
-      <div class="col-xs-12">
-        <p>Embed a link to a document, it will be displayed within your app.</p>
-      </div>
-    </div>
-    <div>
-      <div class="form-group">
-        <div class="col-sm-4 control-label">
-          <label for="add-document">Select a document</label>
-        </div>
-        <div class="col-sm-8">
-          <button id="add-document" class="btn btn-default">Browse your media library</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  -->
 </form>

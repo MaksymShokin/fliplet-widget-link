@@ -219,3 +219,5 @@ Fliplet.Pages.get()
     return Promise.resolve();
   })
   .then(initialiseData);
+
+Fliplet.Widget.autosize();
