@@ -1,6 +1,7 @@
 var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 var validInputEventName = 'interface-validate';
+var defaultTransitionVal = 'slide.left';
 
 var fields = [
   'linkLabel',
@@ -205,7 +206,7 @@ function initialiseData() {
     return;
   }
 
-  $('#transition').val("slide.left").trigger('change')
+  $('#transition').val(defaultTransitionVal).trigger('change')
 }
 
 Fliplet.Pages.get()
