@@ -1,6 +1,7 @@
 var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 var validInputEventName = 'interface-validate';
+var defaultTransitionVal = 'slide.left';
 
 var fields = [
   'linkLabel',
@@ -199,10 +200,13 @@ function save(notifyComplete) {
 function initialiseData() {
   if (widgetInstanceData.action) {
     fields.forEach(function(fieldId) {
-      $('#' + fieldId).val(widgetInstanceData[fieldId]).change();
+      $('#' + fieldId).val(widgetInstanceData[fieldId]).trigger('change');
       Fliplet.Widget.autosize();
     });
+    return;
   }
+
+  $('#transition').val(defaultTransitionVal).trigger('change')
 }
 
 Fliplet.Pages.get()
