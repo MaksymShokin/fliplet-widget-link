@@ -199,10 +199,13 @@ function save(notifyComplete) {
 function initialiseData() {
   if (widgetInstanceData.action) {
     fields.forEach(function(fieldId) {
-      $('#' + fieldId).val(widgetInstanceData[fieldId]).change();
+      $('#' + fieldId).val(widgetInstanceData[fieldId]).trigger('change');
       Fliplet.Widget.autosize();
     });
+    return;
   }
+
+  $('#transition').val("slide.left").trigger('change')
 }
 
 Fliplet.Pages.get()
