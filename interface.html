@@ -17,21 +17,15 @@
         <label for="action">Link action</label>
       </div>
       <div class="col-sm-8">
-
-        <label for="action" class="select-proxy-display">
-          <span class="icon fa fa-chevron-down"></span>
-          <span class="select-value-proxy">None</span>
-
-          <select name="link_type" id="action" data-label="select" class="hidden-select form-control">
-            <option value="none">None</option>
-            <option value="screen">Display another screen</option>
-            <option value="back">Go back to previous screen</option>
-            <option value="url">Open a web page</option>
-            <option value="document">Open a document</option>
-            <option value="video">Play a video</option>
-            <!--<option value="about-overlay">Open the about this app overlay</option>-->
-          </select>
-        </label>
+        <select name="link_type" id="action" data-label="select" class="selectpicker form-control">
+          <option value="none">None</option>
+          <option value="screen">Display another screen</option>
+          <option value="back">Go back to previous screen</option>
+          <option value="url">Open a web page</option>
+          <option value="document">Open a document</option>
+          <option value="video">Play a video</option>
+          <!--<option value="about-overlay">Open the about this app overlay</option>-->
+        </select>
       </div>
     </div>
   </div>
@@ -43,13 +37,9 @@
           <label for="page">Select a screen</label>
         </div>
         <div class="col-sm-8">
-          <label for="page" class="select-proxy-display">
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">Select a screen</span>
-            <select name="link_screen" id="page" data-label="select" class="hidden-select form-control">
-              <option selected value="none">Select a screen</option>
-            </select>
-          </label>
+          <select name="link_screen" id="page" data-label="select" class="selectpicker form-control">
+            <option selected value="none">Select a screen</option>
+          </select>
           <a id="add-query" href="#">Add query variables</a>
         </div>
       </div>
@@ -67,28 +57,24 @@
           <label for="transition">Select an animation</label>
         </div>
         <div class="col-sm-8">
-          <label for="transition" class="select-proxy-display">
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">Slide Left</span>
-            <select name="transition" id="transition" data-label="select" class="hidden-select form-control">
-              <optgroup label="Default">
-                <option value="none">None</option>
-                <option value="fade">Fade</option>
-                <option value="slide.left" selected>Slide Left</option>
-                <option value="slide.right">Slide Right</option>
-                <option value="slide.up">Slide Up</option>
-                <option value="slide.down">Slide Down</option>
-                <option value="flip.left">Flip from Left / Slide Right (Windows)</option>
-                <option value="flip.right">Flip from Right / Slide Left (Windows)</option>
-                <option value="flip.up">Flip from Top / Slide Up (Windows)</option>
-                <option value="flip.down">Flip from Bottom / Slide Down (Windows)</option>
-              </optgroup>
-              <optgroup label="iOS Enhanced">
-                <option value="curl.up">Curl Up (iOS) / Slide Up (Android/Windows)</option>
-                <option value="curl.down">Curl Down (iOS) / Slide Down (Android/Windows)</option>
-              </optgroup>
-            </select>
-          </label>
+          <select name="transition" id="transition" data-label="select" class="selectpicker form-control">
+            <optgroup label="Default">
+              <option value="none">None</option>
+              <option value="fade">Fade</option>
+              <option value="slide.left" selected>Slide Left</option>
+              <option value="slide.right">Slide Right</option>
+              <option value="slide.up">Slide Up</option>
+              <option value="slide.down">Slide Down</option>
+              <option value="flip.left">Flip from Left / Slide Right (Windows)</option>
+              <option value="flip.right">Flip from Right / Slide Left (Windows)</option>
+              <option value="flip.up">Flip from Top / Slide Up (Windows)</option>
+              <option value="flip.down">Flip from Bottom / Slide Down (Windows)</option>
+            </optgroup>
+            <optgroup label="iOS Enhanced">
+              <option value="curl.up">Curl Up (iOS) / Slide Up (Android/Windows)</option>
+              <option value="curl.down">Curl Down (iOS) / Slide Down (Android/Windows)</option>
+            </optgroup>
+          </select>
         </div>
       </div>
     </div>

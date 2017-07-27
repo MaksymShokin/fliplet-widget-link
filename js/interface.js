@@ -119,11 +119,6 @@ $('#action').on('change', function onLinkTypeChange() {
   Fliplet.Widget.autosize();
 });
 
-$('#page').on('change', function onScreenListChange() {
-  var selectedText = $(this).find("option:selected").text();
-  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
-});
-
 $('#transition').on('change', function onTransitionListChange() {
   var selectedText = $(this).find("option:selected").text();
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
@@ -215,6 +210,7 @@ Fliplet.Pages.get()
         '>' + page.title + '</option>'
       );
     });
+    $('.selectpicker').selectpicker('refresh');
 
     return Promise.resolve();
   })
