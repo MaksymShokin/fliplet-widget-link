@@ -21,13 +21,25 @@ var providerInstance;
 var currentMode = null;
 var files = $.extend(widgetInstanceData.files, {
   selectedFiles: {},
+  selectFiles: [], // To use the restore on File Picker
   selectMultiple: false,
   type: ''
 });
 
+var config = files;
+if (files.id) {
+  config.selectFiles.push({
+    appId: files.appId ? files.appId : undefined,
+    organizationId: files.organizationId ? files.organizationId : undefined,
+    mediaFolderId: files.mediaFolderId ? files.mediaFolderId : undefined,
+    parentId: files.parentId ? files.parentId : undefined,
+    contentType: files.contentType ? files.contentType : undefined,
+    id: files.id ? files.id : undefined
+  });
+}
+
 Object.keys(btnSelector).forEach(function(key, index) {
   var selector = btnSelector[key];
-  var config = files;
 
   $(selector).on('click', function(e) {
     e.preventDefault();
@@ -143,7 +155,8 @@ $('#query').on('change', function() {
 });
 
 $('.document-remove').on('click', function() {
-  files.selectedFiles = {};
+  files.selectedFiles = [];
+  files.toRemove = true;
   $('.document .add-document').text('Browse your media library');
   $('.document .info-holder').addClass('hidden');
   $('.document .file-title span').text('');
@@ -151,7 +164,8 @@ $('.document-remove').on('click', function() {
 });
 
 $('.video-remove').on('click', function() {
-  files.selectedFiles = {};
+  files.selectedFiles = [];
+  files.toRemove = true;
   $('.video .add-video').text('Browse your media library');
   $('.video .info-holder').addClass('hidden');
   $('.video .file-title span').text('');
@@ -183,7 +197,11 @@ function save(notifyComplete) {
     data.url = 'http://' + data.url;
   }
 
-  data.files = files.name ? files : files.selectedFiles;
+  if (files.toRemove) {
+    data.files = {};
+  } else {
+    data.files = _.isEmpty(files.selectedFiles) ? files : files.selectedFiles;
+  }
 
   if (notifyComplete) {
     // TODO: validate query
