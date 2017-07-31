@@ -155,7 +155,8 @@ $('#query').on('change', function() {
 });
 
 $('.document-remove').on('click', function() {
-  files.selectedFiles = [];
+  files.selectedFiles = {};
+  files.selectFiles = [];
   files.toRemove = true;
   $('.document .add-document').text('Browse your media library');
   $('.document .info-holder').addClass('hidden');
@@ -164,7 +165,8 @@ $('.document-remove').on('click', function() {
 });
 
 $('.video-remove').on('click', function() {
-  files.selectedFiles = [];
+  files.selectedFiles = {};
+  files.selectFiles = [];
   files.toRemove = true;
   $('.video .add-video').text('Browse your media library');
   $('.video .info-holder').addClass('hidden');
