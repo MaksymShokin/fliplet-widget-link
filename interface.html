@@ -115,7 +115,7 @@
       <div class="col-sm-8">
         <div class="file-holder document">
           <div class="btn btn-default add-document">{{#unless files.id}}Browse your media library{{else}}Replace document{{/unless}}</div>
-          <div class="info-holder {{#unless files.id}}hidden{{/unless}}">
+          <div class="info-holder clearfix {{#unless files.id}}hidden{{/unless}}">
             <div class="file-title"><i class="fa fa-file" aria-hidden="true"></i> <span>{{files.name}}</span></div>
             <div class="btn btn-link text-danger document-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
           </div>
@@ -133,7 +133,7 @@
       <div class="col-sm-8">
         <div class="file-holder video">
           <div class="btn btn-default add-video">{{#unless files.id}}Browse your media library{{else}}Replace video{{/unless}}</div>
-          <div class="info-holder {{#unless files.id}}hidden{{/unless}}">
+          <div class="info-holder clearfix {{#unless files.id}}hidden{{/unless}}">
             <div class="file-title"><i class="fa fa-file-video-o" aria-hidden="true"></i> <span>{{files.name}}</span></div>
             <div class="btn btn-link text-danger video-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove</div>
           </div>

@@ -139,11 +139,15 @@ body {
   transform: translate(0, 0);
 }
 
+.info-holder {
+  margin-bottom: 15px;
+}
+
 .file-title {
-  display: inline-block;
+  float: left;
+  max-width: 220px;
+  margin-top: 10px;
   margin-left: 10px;
-  height: 46px;
-  line-height: 46px;
 }
 
 .info-holder .btn-link {

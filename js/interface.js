@@ -45,9 +45,9 @@ Object.keys(btnSelector).forEach(function(key, index) {
     e.preventDefault();
 
     if ($(this).hasClass('add-document')) {
-      config.type = 'document'
+      config.type = 'document';
     } else if ($(this).hasClass('add-video')) {
-      config.type = 'video'
+      config.type = 'video';
     }
 
     Fliplet.Widget.toggleSaveButton(Object.keys(config.selectedFiles).length > 0);
@@ -75,13 +75,16 @@ Object.keys(btnSelector).forEach(function(key, index) {
 
     providerInstance.then(function(data) {
       Fliplet.Studio.emit('widget-save-label-update', {
-        text: 'Save & Close'
+        text: 'Save'
       });
       Fliplet.Widget.info('');
       Fliplet.Widget.toggleCancelButton(true);
       Fliplet.Widget.toggleSaveButton(true);
       files.selectedFiles = data.data.length === 1 ? data.data[0] : data.data;
       providerInstance = null;
+      Fliplet.Studio.emit('widget-save-label-update', {
+        text: 'Save & Close'
+      });
       if (key === 'document') {
         $('.document .add-document').text('Replace document');
         $('.document .info-holder').removeClass('hidden');
