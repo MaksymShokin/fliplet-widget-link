@@ -30,6 +30,7 @@
             <option value="document">Open a document</option>
             <option value="video">Play a video</option>
             <option value="about-overlay">Open the about this app overlay</option>
+            <option value="app">Link to an app</option>
           </select>
         </label>
       </div>
@@ -139,6 +140,24 @@
           </div>
         </div>
         <p class="help-block">When the user taps to play the video, it will be displayed within your app using a video player.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="appSection" class="section">
+    <div class="form-group">
+      <div class="col-sm-4 control-label">
+        <label for="add-document">Select app action</label>
+      </div>
+      <div class="col-sm-8">
+        <label for="appAction" class="select-proxy-display">
+          <span class="icon fa fa-chevron-down"></span>
+          <span class="select-value-proxy">-- Please select</span>
+          <select id="appAction" name="appAction" data-label="select" class="hidden-select form-control">
+            <option value="">-- Please select</option>
+          </select>
+        </label>
+        <p class="help-block">Please select an app and action from the list</p>
       </div>
     </div>
   </div>

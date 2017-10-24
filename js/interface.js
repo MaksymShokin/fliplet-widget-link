@@ -1,5 +1,6 @@
 var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
+var customAppsList = Fliplet.Navigate.Apps.list();
 var validInputEventName = 'interface-validate';
 var defaultTransitionVal = 'slide.left';
 
@@ -37,6 +38,23 @@ if (files.id) {
     id: files.id ? files.id : undefined
   });
 }
+
+// Add custom app actions to the html
+var $appAction = $('#appAction');
+Object.keys(customAppsList).forEach(function(appName) {
+  var app = customAppsList[appName];
+
+  if (app.actions) {
+    var $opt = $('<optgroup label="' + app.label + '"></optgroup>');
+
+    Object.keys(app.actions).forEach(function (actionName) {
+      var action = app.actions[actionName];
+      $opt.append('<option value="' + appName + '.' + actionName + '">' + app.label + ': ' + action.label + '</option>');
+    });
+
+    $appAction.append($opt);
+  }
+});
 
 Object.keys(btnSelector).forEach(function(key, index) {
   var selector = btnSelector[key];
@@ -137,6 +155,11 @@ $('#page').on('change', function onScreenListChange() {
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 });
 
+$appAction.on('change', function onAppActionChange() {
+  var selectedText = $(this).find("option:selected").text();
+  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+});
+
 $('#transition').on('change', function onTransitionListChange() {
   var selectedText = $(this).find("option:selected").text();
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
@@ -174,6 +197,10 @@ $('.video-remove').on('click', function() {
   Fliplet.Widget.autosize();
 });
 
+if (widgetInstanceData.action === 'app' && widgetInstanceData.appAction) {
+  $appAction.find('option[value="' + widgetInstanceData.appAction + '"]').attr('selected','selected');
+}
+
 Fliplet.Widget.onSaveRequest(function() {
   if (providerInstance) {
     return providerInstance.forwardSaveRequest();
@@ -194,6 +221,11 @@ function save(notifyComplete) {
   fields.forEach(function(fieldId) {
     data[fieldId] = $('#' + fieldId).val();
   });
+
+  var appAction = $appAction.val();
+  if (data.action === 'app' && appAction) {
+    data.appAction = appAction;
+  }
 
   if (data.url && !data.url.match(/^[A-z]+:/i)) {
     data.url = 'http://' + data.url;
@@ -223,6 +255,12 @@ function initialiseData() {
       $('#' + fieldId).val(widgetInstanceData[fieldId]).trigger('change');
       Fliplet.Widget.autosize();
     });
+
+    if (widgetInstanceData.action === 'app' && widgetInstanceData.appAction) {
+      $appAction.val(widgetInstanceData.appAction);
+      $appAction.trigger('change');
+    }
+
     return;
   }
 

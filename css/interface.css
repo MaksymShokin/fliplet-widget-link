@@ -5,7 +5,8 @@ body {
 #documentSection,
 #screenSection,
 #urlSection,
-#videoSection {
+#videoSection,
+#appSection {
   display: none;
 }
 
