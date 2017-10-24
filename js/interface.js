@@ -197,8 +197,8 @@ $('.video-remove').on('click', function() {
   Fliplet.Widget.autosize();
 });
 
-if (widgetInstanceData.action === 'app' && widgetInstanceData.appAction) {
-  $appAction.find('option[value="' + widgetInstanceData.appAction + '"]').attr('selected','selected');
+if (widgetInstanceData.action === 'app' && widgetInstanceData.app) {
+  $appAction.find('option[value="' + widgetInstanceData.app + '"]').attr('selected','selected');
 }
 
 Fliplet.Widget.onSaveRequest(function() {
@@ -224,7 +224,7 @@ function save(notifyComplete) {
 
   var appAction = $appAction.val();
   if (data.action === 'app' && appAction) {
-    data.appAction = appAction;
+    data.app = appAction;
   }
 
   if (data.url && !data.url.match(/^[A-z]+:/i)) {
