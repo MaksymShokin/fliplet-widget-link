@@ -231,11 +231,20 @@ function save(notifyComplete) {
     data.url = 'http://' + data.url;
   }
 
-  if (files.toRemove) {
-    data.files = {};
-  } else {
-    data.files = _.isEmpty(files.selectedFiles) ? files : files.selectedFiles;
+  if (['document', 'video'].indexOf(data.action) !== -1) {
+    if (files.toRemove) {
+      data.files = {};
+    } else {
+      data.files = _.isEmpty(files.selectedFiles) ? files : files.selectedFiles;
+    }
   }
+
+  // cleanup
+  ['url', 'query', 'page'].forEach(function (key) {
+    if (data[key] === '') {
+      delete data[key];
+    }
+  });
 
   if (notifyComplete) {
     // TODO: validate query
