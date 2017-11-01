@@ -30,7 +30,7 @@
             <option value="document">Open a document</option>
             <option value="video">Play a video</option>
             <option value="about-overlay">Open the about this app overlay</option>
-            <option value="app">Link to an app</option>
+            <option value="app">Link to an external app</option>
           </select>
         </label>
       </div>
@@ -147,17 +147,75 @@
   <div id="appSection" class="section">
     <div class="form-group">
       <div class="col-sm-4 control-label">
-        <label for="add-document">Select app action</label>
+        <label for="appAction">Select the app and action</label>
       </div>
       <div class="col-sm-8">
         <label for="appAction" class="select-proxy-display">
           <span class="icon fa fa-chevron-down"></span>
-          <span class="select-value-proxy">-- Please select</span>
+          <span class="select-value-proxy">Select one</span>
           <select id="appAction" name="appAction" data-label="select" class="hidden-select form-control">
-            <option value="">-- Please select</option>
+            <option value="">Select one</option>
           </select>
         </label>
-        <p class="help-block">Please select an app and action from the list</p>
+      </div>
+    </div>
+    <div class="form-group appLinkFields appGDriveFolder">
+      <div class="col-sm-4 control-label">
+        <label for="appGDriveFolder">Enter the full URL of the Google Drive folder</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" id="appGDriveFolder" name="appGDriveFolder" class="form-control" />
+        <p class="help-block"><small>E.g. <code>https://drive.google.com/drive/u/0/folders/xxxxxxxx</code></small></p>
+        <p class="error-success-message"></p>
+      </div>
+    </div>
+    <div class="form-group appLinkFields appGDriveDocument">
+      <div class="col-sm-4 control-label">
+        <label for="appGDriveDocument">Enter the shareable link of the Google Drive document</label>
+        <p class="help-block"><small>You can get this link by right clicking the document you want and select <strong>Get shareable link</strong>.</small></p>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" id="appGDriveDocument" name="appGDriveDocument" class="form-control" />
+        <p class="help-block"><small>E.g. <code>https://drive.google.com/open?id=xxxxxxxx</code></small></p>
+        <p class="error-success-message"></p>
+      </div>
+    </div>
+    <div class="form-group appLinkFields appGoogleDocument">
+      <div class="col-sm-4 control-label">
+        <label for="appGoogleDocument">Enter the full URL of the Google Document</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" id="appGoogleDocument" name="appGoogleDocument" class="form-control" />
+        <p class="help-block"><small>E.g. <code>https://docs.google.com/document/d/xxxxxxxx</code></small></p>
+        <p class="error-success-message"></p>
+      </div>
+    </div>
+    <div class="form-group appLinkFields appGoogleSheets">
+      <div class="col-sm-4 control-label">
+        <label for="appGoogleSheets">Enter the full URL of the Google Spreadsheet</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" id="appGoogleSheets" name="appGoogleSheets" class="form-control" />
+        <p class="help-block"><small>E.g. <code>https://docs.google.com/spreadsheets/d/xxxxxxxx</code></small></p>
+        <p class="error-success-message"></p>
+      </div>
+    </div>
+    <div class="form-group appLinkFields appGooglePresentation">
+      <div class="col-sm-4 control-label">
+        <label for="appGooglePresentation">Enter the full URL of the Google Slides</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" id="appGooglePresentation" name="appGooglePresentation" class="form-control" />
+        <p class="help-block"><small>E.g. <code>https://docs.google.com/presentation/d/xxxxxxxx</code></small></p>
+        <p class="error-success-message"></p>
+      </div>
+    </div>
+    <div class="form-group appLinkFields appGmail">
+      <div class="col-sm-4 control-label">
+        <label>Configure the email template</label>
+      </div>
+      <div class="col-sm-8">
+        <div class="btn btn-default configureEmailTemplate">Configure</div>
       </div>
     </div>
   </div>

@@ -18,6 +18,16 @@ var btnSelector = {
   video: '.add-video'
 };
 
+var externalAppValueMap = {
+  'gdrive.folder': 'appGDriveFolder',
+  'gdrive.file': 'appGDriveDocument',
+  'gdocs.document': 'appGoogleDocument',
+  'gsheets.spreadsheet': 'appGoogleSheets',
+  'gslides.presentation': 'appGooglePresentation',
+  'gmail.compose': 'appGmail'
+}
+
+var emailTemplateAddProvider;
 var providerInstance;
 var currentMode = null;
 var files = $.extend(widgetInstanceData.files, {
@@ -39,6 +49,12 @@ if (files.id) {
   });
 }
 
+var emailProviderData = $.extend(true, {
+  subject: '',
+  html: '',
+  to: []
+}, widgetInstanceData.appData ? widgetInstanceData.appData.untouchedData : {});
+
 // Add custom app actions to the html
 var $appAction = $('#appAction');
 Object.keys(customAppsList).forEach(function(appName) {
@@ -47,9 +63,9 @@ Object.keys(customAppsList).forEach(function(appName) {
   if (app.actions) {
     var $opt = $('<optgroup label="' + app.label + '"></optgroup>');
 
-    Object.keys(app.actions).forEach(function (actionName) {
+    Object.keys(app.actions).forEach(function(actionName) {
       var action = app.actions[actionName];
-      $opt.append('<option value="' + appName + '.' + actionName + '">' + app.label + ': ' + action.label + '</option>');
+      $opt.append('<option value="' + appName + '.' + actionName + '">' + action.label + '</option>');
     });
 
     $appAction.append($opt);
@@ -133,6 +149,11 @@ window.addEventListener('message', function(event) {
   isValid: false
 });*/
 
+function validUrlForAction(url) {
+  var result = url.match(/drive\.google\.com/);
+  return result && result.length ? true : false;
+}
+
 $(window).on('resize', Fliplet.Widget.autosize);
 
 $('#action').on('change', function onLinkTypeChange() {
@@ -157,7 +178,16 @@ $('#page').on('change', function onScreenListChange() {
 
 $appAction.on('change', function onAppActionChange() {
   var selectedText = $(this).find("option:selected").text();
+  var value = $(this).val();
+
   $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+
+  // Hide visible fields if any
+  $('.appLinkFields').removeClass('show');
+  // Shows the correct field based on the value
+  $('.' + externalAppValueMap[value]).addClass('show');
+  // Tells the parent widget this provider has changed its interface height
+  Fliplet.Widget.autosize();
 });
 
 $('#transition').on('change', function onTransitionListChange() {
@@ -197,13 +227,50 @@ $('.video-remove').on('click', function() {
   Fliplet.Widget.autosize();
 });
 
+$.each(externalAppValueMap, function(key) {
+  $('#' + externalAppValueMap[key]).on('change input', function() {
+    var url = $(this).val();
+    $(this).siblings('.error-success-message').removeClass('text-danger text-success').html('');
+    if (!validUrlForAction(url)) {
+      $(this).siblings('.error-success-message').addClass('text-danger').html('URL isn\'t a valid Google action. Your app will fail to open this URL.');
+      return;
+    }
+    
+    $(this).siblings('.error-success-message').addClass('text-success').html('✅ URL is valid');
+  });
+});
+
+$('.configureEmailTemplate').on('click', function() {
+  // @TODO: Add saved data OR default
+  emailProviderData.options = {
+    hideReplyTo: true,
+    usage: {
+      appName: 'Insert your app name',
+      organisationName: 'Insert your organisation name'
+    }
+  };
+
+  emailTemplateAddProvider = Fliplet.Widget.open('com.fliplet.email-provider', {
+    data: emailProviderData
+  });
+
+  emailTemplateAddProvider.then(function onForwardEmailProvider(result) {
+    emailProviderData = result.data;
+    emailTemplateAddProvider = null;
+    Fliplet.Widget.autosize();
+  });
+});
+
 if (widgetInstanceData.action === 'app' && widgetInstanceData.app) {
-  $appAction.find('option[value="' + widgetInstanceData.app + '"]').attr('selected','selected');
+  $appAction.find('option[value="' + widgetInstanceData.app + '"]').attr('selected', 'selected');
 }
 
 Fliplet.Widget.onSaveRequest(function() {
   if (providerInstance) {
     return providerInstance.forwardSaveRequest();
+  }
+  if (emailTemplateAddProvider) {
+    return emailTemplateAddProvider.forwardSaveRequest();
   }
 
   save(true);
@@ -225,6 +292,35 @@ function save(notifyComplete) {
   var appAction = $appAction.val();
   if (data.action === 'app' && appAction) {
     data.app = appAction;
+    data.appData = {};
+
+    if (data.app === "gmail.compose") {
+      data.appData.untouchedData = emailProviderData
+      data.appData.body = emailProviderData.html
+      data.appData.subject = emailProviderData.subject
+      data.appData.to = _.find(emailProviderData.to, function(o) { return o.type === 'to'; }) || '';
+      data.appData.cc = _.find(emailProviderData.to, function(o) { return o.type === 'cc'; }) || '';
+      data.appData.bcc = _.find(emailProviderData.to, function(o) { return o.type === 'bcc'; }) || '';
+    } else {
+      var urlValue = $('#' + externalAppValueMap[appAction]).val();
+      var result;
+
+      data.appData.fullUrl = urlValue;
+      if (appAction === "gdocs.document" || appAction === "gdocs.spreadsheet" || appAction === "gdocs.presentation") {
+        result = urlValue.match(/\/d\/([A-z0-9-_]+)/);
+        data.appData.id = result.length && result[1];
+      }
+
+      if (appAction === "gdrive.folder") {
+        result = urlValue.match(/folders\/([A-z0-9-_]+)/);
+        data.appData.id = result.length && result[1];
+      }
+
+      if (appAction === "gdrive.file") {
+        result = urlValue.match(/open\?.?id=([A-z0-9-_]+)/);
+        data.appData.id = result.length && result[1];
+      }
+    }
   }
 
   if (data.url && !data.url.match(/^[A-z]+:/i)) {
@@ -240,7 +336,7 @@ function save(notifyComplete) {
   }
 
   // cleanup
-  ['url', 'query', 'page'].forEach(function (key) {
+  ['url', 'query', 'page'].forEach(function(key) {
     if (data[key] === '') {
       delete data[key];
     }
@@ -265,9 +361,12 @@ function initialiseData() {
       Fliplet.Widget.autosize();
     });
 
-    if (widgetInstanceData.action === 'app' && widgetInstanceData.appAction) {
-      $appAction.val(widgetInstanceData.appAction);
+    if (widgetInstanceData.action === 'app' && widgetInstanceData.app) {
+      $appAction.val(widgetInstanceData.app);
       $appAction.trigger('change');
+      if (widgetInstanceData.appData && widgetInstanceData.appData.fullUrl) {
+        $('#' + externalAppValueMap[widgetInstanceData.app]).val(widgetInstanceData.appData.fullUrl)
+      }
     }
 
     return;

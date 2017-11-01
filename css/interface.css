@@ -6,7 +6,8 @@ body {
 #screenSection,
 #urlSection,
 #videoSection,
-#appSection {
+#appSection,
+.appLinkFields {
   display: none;
 }
 
