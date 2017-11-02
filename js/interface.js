@@ -62,7 +62,7 @@ Fliplet.Organizations.get().then(function (organizations) {
   });
 
   if (!valid) {
-    $('#action option[value="app"]').remove()
+    $('#action option[value="app"]').remove();
   }
 });
 
