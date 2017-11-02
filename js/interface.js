@@ -56,9 +56,15 @@ var emailProviderData = $.extend(true, {
 }, widgetInstanceData.appData ? widgetInstanceData.appData.untouchedData : {});
 
 // Only Fliplet, "Colgate" and "Hills Pet Nutirition" can see the "Open app" feature while it's on beta
-if ([8, 64, 70].indexOf(parseInt(Fliplet.Env.get('organizationId'), 10)) === -1 && Fliplet.Env.get('organizationName').toLowerCase().indexOf('fliplet') === -1) {
-  $('#action option[value="app"]').remove();
-}
+Fliplet.Organizations.get().then(function (organizations) {
+  var valid = organizations.some(function (org) {
+    return [8, 64, 70].indexOf(org.id) !== -1 || org.name.toLowerCase().indexOf('fliplet') !== -1;
+  });
+
+  if (!valid) {
+    $('#action option[value="app"]').remove();
+  }
+});
 
 // Add custom app actions to the html
 var $appAction = $('#appAction');
