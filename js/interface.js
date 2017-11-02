@@ -55,6 +55,11 @@ var emailProviderData = $.extend(true, {
   to: []
 }, widgetInstanceData.appData ? widgetInstanceData.appData.untouchedData : {});
 
+// Only Fliplet, "Colgate" and "Hills Pet Nutirition" can see the "Open app" feature while it's on beta
+if ([8, 64, 70].indexOf(parseInt(Fliplet.Env.get('organizationId'), 10)) === -1 && Fliplet.Env.get('organizationName').toLowerCase().indexOf('fliplet') === -1) {
+  $('#action option[value="app"]').remove();
+}
+
 // Add custom app actions to the html
 var $appAction = $('#appAction');
 Object.keys(customAppsList).forEach(function(appName) {
@@ -235,7 +240,7 @@ $.each(externalAppValueMap, function(key) {
       $(this).siblings('.error-success-message').addClass('text-danger').html('URL isn\'t a valid Google action. Your app will fail to open this URL.');
       return;
     }
-    
+
     $(this).siblings('.error-success-message').addClass('text-success').html('✅ URL is valid');
   });
 });
