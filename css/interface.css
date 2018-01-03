@@ -16,14 +16,6 @@ body {
   overflow: hidden;
 }
 
-.section h2 {
-  margin-top: 0;
-}
-
-.section h2 small {
-  color: #14505e;
-}
-
 .form-group .btn-default {
   color: #333;
   background-color: #FFF;
