@@ -142,20 +142,6 @@ Object.keys(btnSelector).forEach(function(key, index) {
   });
 });
 
-window.addEventListener('message', function(event) {
-  if (event.data === 'cancel-button-pressed') {
-    if (!providerInstance) return;
-    providerInstance.close();
-    providerInstance = null;
-    Fliplet.Studio.emit('widget-save-label-update', {
-      text: 'Save & Close'
-    });
-    Fliplet.Widget.toggleCancelButton(true);
-    Fliplet.Widget.toggleSaveButton(true);
-    Fliplet.Widget.info('');
-  }
-});
-
 /*Fliplet.Widget.emit(validInputEventName, {
   isValid: false
 });*/
@@ -285,6 +271,23 @@ Fliplet.Widget.onSaveRequest(function() {
   }
 
   save(true);
+});
+
+Fliplet.Widget.onCancelRequest(function() {
+  if (providerInstance) {
+    providerInstance.close();
+    providerInstance = null;
+    Fliplet.Studio.emit('widget-save-label-update', {
+      text: 'Save & Close'
+    });
+    Fliplet.Widget.toggleCancelButton(true);
+    Fliplet.Widget.toggleSaveButton(true);
+    Fliplet.Widget.info('');
+    providerInstance.forwardCancelRequest();
+  }
+  if (emailTemplateAddProvider) {
+    emailTemplateAddProvider.forwardCancelRequest();
+  }
 });
 
 // Save data when submitting the form
