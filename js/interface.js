@@ -274,6 +274,12 @@ Fliplet.Widget.onSaveRequest(function() {
 });
 
 Fliplet.Widget.onCancelRequest(function() {
+  if (emailTemplateAddProvider) {
+    emailTemplateAddProvider.close();
+    emailTemplateAddProvider = null;
+    emailTemplateAddProvider.forwardCancelRequest();
+    return;
+  }
   if (providerInstance) {
     providerInstance.close();
     providerInstance = null;
@@ -284,9 +290,6 @@ Fliplet.Widget.onCancelRequest(function() {
     Fliplet.Widget.toggleSaveButton(true);
     Fliplet.Widget.info('');
     providerInstance.forwardCancelRequest();
-  }
-  if (emailTemplateAddProvider) {
-    emailTemplateAddProvider.forwardCancelRequest();
   }
 });
 
