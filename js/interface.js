@@ -281,6 +281,7 @@ Fliplet.Widget.onCancelRequest(function() {
     return;
   }
   if (providerInstance) {
+    providerInstance.forwardCancelRequest();
     providerInstance.close();
     providerInstance = null;
     Fliplet.Studio.emit('widget-save-label-update', {
@@ -289,7 +290,6 @@ Fliplet.Widget.onCancelRequest(function() {
     Fliplet.Widget.toggleCancelButton(true);
     Fliplet.Widget.toggleSaveButton(true);
     Fliplet.Widget.info('');
-    providerInstance.forwardCancelRequest();
   }
 });
 
