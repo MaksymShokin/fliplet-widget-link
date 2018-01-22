@@ -277,11 +277,9 @@ Fliplet.Widget.onCancelRequest(function() {
   if (emailTemplateAddProvider) {
     emailTemplateAddProvider.close();
     emailTemplateAddProvider = null;
-    emailTemplateAddProvider.forwardCancelRequest();
     return;
   }
   if (providerInstance) {
-    providerInstance.forwardCancelRequest();
     providerInstance.close();
     providerInstance = null;
     Fliplet.Studio.emit('widget-save-label-update', {
