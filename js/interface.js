@@ -25,8 +25,7 @@ var externalAppValueMap = {
   'gsheets.spreadsheet': 'appGoogleSheets',
   'gslides.presentation': 'appGooglePresentation',
   'gmail.compose': 'appGmail',
-  'googlechrome.http': 'appGoogleChromeHttp',
-  'googlechrome.https': 'appGoogleChromeHttps'
+  'googlechrome.website': 'appGoogleChromeWebsite',
 }
 
 var emailTemplateAddProvider;
