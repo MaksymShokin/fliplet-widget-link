@@ -24,7 +24,9 @@ var externalAppValueMap = {
   'gdocs.document': 'appGoogleDocument',
   'gsheets.spreadsheet': 'appGoogleSheets',
   'gslides.presentation': 'appGooglePresentation',
-  'gmail.compose': 'appGmail'
+  'gmail.compose': 'appGmail',
+  'googlechrome.http': 'appGoogleChromeHttp',
+  'googlechrome.https': 'appGoogleChromeHttps'
 }
 
 var emailTemplateAddProvider;
@@ -142,15 +144,6 @@ Object.keys(btnSelector).forEach(function(key, index) {
   });
 });
 
-/*Fliplet.Widget.emit(validInputEventName, {
-  isValid: false
-});*/
-
-function validUrlForAction(url) {
-  var result = url.match(/drive\.google\.com/);
-  return result && result.length ? true : false;
-}
-
 $(window).on('resize', Fliplet.Widget.autosize);
 
 $('#action').on('change', function onLinkTypeChange() {
@@ -227,9 +220,11 @@ $('.video-remove').on('click', function() {
 $.each(externalAppValueMap, function(key) {
   $('#' + externalAppValueMap[key]).on('change input', function() {
     var url = $(this).val();
+
     $(this).siblings('.error-success-message').removeClass('text-danger text-success').html('');
-    if (!validUrlForAction(url)) {
-      $(this).siblings('.error-success-message').addClass('text-danger').html('URL isn\'t a valid Google action. Your app will fail to open this URL.');
+
+    if (!Fliplet.Navigate.Apps.validateInput(key, url)) {
+      $(this).siblings('.error-success-message').addClass('text-danger').html('URL isn\'t a valid action. Your app will fail to open this URL.');
       return;
     }
 
