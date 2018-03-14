@@ -310,6 +310,8 @@ function save(notifyComplete) {
       data.appData.to = _.find(emailProviderData.to, function(o) { return o.type === 'to'; }) || '';
       data.appData.cc = _.find(emailProviderData.to, function(o) { return o.type === 'cc'; }) || '';
       data.appData.bcc = _.find(emailProviderData.to, function(o) { return o.type === 'bcc'; }) || '';
+    } else if (data.app === 'googlechrome.website') {
+      data.appData.url = $('#' + externalAppValueMap[appAction]).val();
     } else {
       var urlValue = $('#' + externalAppValueMap[appAction]).val();
       var result;
@@ -373,8 +375,9 @@ function initialiseData() {
     if (widgetInstanceData.action === 'app' && widgetInstanceData.app) {
       $appAction.val(widgetInstanceData.app);
       $appAction.trigger('change');
-      if (widgetInstanceData.appData && widgetInstanceData.appData.fullUrl) {
-        $('#' + externalAppValueMap[widgetInstanceData.app]).val(widgetInstanceData.appData.fullUrl)
+      var url = widgetInstanceData.appData.fullUrl || widgetInstanceData.appData.url;
+      if (widgetInstanceData.appData && url) {
+        $('#' + externalAppValueMap[widgetInstanceData.app]).val(url);
       }
     }
 
