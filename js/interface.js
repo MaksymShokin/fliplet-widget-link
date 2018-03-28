@@ -380,10 +380,11 @@ function initialiseData() {
         $('#' + externalAppValueMap[widgetInstanceData.app]).val(url);
       }
     }
-
+    $('.spinner-holder').removeClass('animated');
     return;
   }
 
+  $('.spinner-holder').removeClass('animated');
   $('#transition').val(defaultTransitionVal).trigger('change')
 }
 
