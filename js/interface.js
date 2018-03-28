@@ -383,10 +383,11 @@ function initialiseData() {
         $('#' + externalAppValueMap[widgetInstanceData.app]).val(widgetInstanceData.appData.fullUrl)
       }
     }
-
+    $('.spinner-holder').removeClass('animated');
     return;
   }
 
+  $('.spinner-holder').removeClass('animated');
   $('#transition').val(defaultTransitionVal).trigger('change')
 }
 
