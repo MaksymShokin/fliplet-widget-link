@@ -2,7 +2,7 @@ var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 var customAppsList = Fliplet.Navigate.Apps.list();
 var validInputEventName = 'interface-validate';
-var defaultTransitionVal = 'slide.left';
+var defaultTransitionVal = 'fade';
 
 var fields = [
   'linkLabel',
