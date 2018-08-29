@@ -147,7 +147,6 @@ $(window).on('resize', Fliplet.Widget.autosize);
 
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
-  var selectedText = $(this).find("option:selected").text();
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
 
@@ -159,12 +158,7 @@ $('#action').on('change', function onLinkTypeChange() {
   Fliplet.Widget.autosize();
 });
 
-$('#page').on('change', function onScreenListChange() {
-  var selectedText = $(this).find("option:selected").text();
-});
-
 $appAction.on('change', function onAppActionChange() {
-  var selectedText = $(this).find("option:selected").text();
   var value = $(this).val();
 
   // Hide visible fields if any
@@ -173,10 +167,6 @@ $appAction.on('change', function onAppActionChange() {
   $('.' + externalAppValueMap[value]).addClass('show');
   // Tells the parent widget this provider has changed its interface height
   Fliplet.Widget.autosize();
-});
-
-$('#transition').on('change', function onTransitionListChange() {
-  var selectedText = $(this).find("option:selected").text();
 });
 
 $('#add-query').on('click', function() {
