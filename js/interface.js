@@ -147,10 +147,8 @@ $(window).on('resize', Fliplet.Widget.autosize);
 
 $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
-  var selectedText = $(this).find("option:selected").text();
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
-  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 
   /*Fliplet.Widget.emit(validInputEventName, {
     isValid: selectedValue !== 'none'
@@ -160,16 +158,8 @@ $('#action').on('change', function onLinkTypeChange() {
   Fliplet.Widget.autosize();
 });
 
-$('#page').on('change', function onScreenListChange() {
-  var selectedText = $(this).find("option:selected").text();
-  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
-});
-
 $appAction.on('change', function onAppActionChange() {
-  var selectedText = $(this).find("option:selected").text();
   var value = $(this).val();
-
-  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 
   // Hide visible fields if any
   $('.appLinkFields').removeClass('show');
@@ -177,11 +167,6 @@ $appAction.on('change', function onAppActionChange() {
   $('.' + externalAppValueMap[value]).addClass('show');
   // Tells the parent widget this provider has changed its interface height
   Fliplet.Widget.autosize();
-});
-
-$('#transition').on('change', function onTransitionListChange() {
-  var selectedText = $(this).find("option:selected").text();
-  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 });
 
 $('#add-query').on('click', function() {
