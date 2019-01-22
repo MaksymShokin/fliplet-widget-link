@@ -56,6 +56,118 @@ var emailProviderData = $.extend(true, {
   to: []
 }, widgetInstanceData.appData ? widgetInstanceData.appData.untouchedData : {});
 
+function showPageQuery() {
+  $('#add-query').addClass('hidden');
+  $('#screen-form').addClass('show-query');
+  Fliplet.Widget.autosize();
+}
+
+// Save data when submitting the form
+function save(notifyComplete) {
+  // Clean data to store the new saved values
+  var data = {};
+
+  // Attach options from widgetInstanceData
+  data.options = widgetInstanceData.options;
+
+  // Get and save values to data
+  fields.forEach(function(fieldId) {
+    data[fieldId] = $('#' + fieldId).val();
+  });
+
+  var appAction = $appAction.val();
+  if (data.action === 'app' && appAction) {
+    data.app = appAction;
+    data.appData = {};
+
+    if (data.app === "gmail.compose") {
+      data.appData.untouchedData = emailProviderData
+      data.appData.body = emailProviderData.html
+      data.appData.subject = emailProviderData.subject
+
+      // All recipients are found in the "emailProviderData.to" array, but with "type"
+      // defining whether they are "to" or "cc" or "bcc" recipients.
+      data.appData.to = _.find(emailProviderData.to, function(o) { return o.type === 'to'; }) || '';
+      data.appData.cc = _.find(emailProviderData.to, function(o) { return o.type === 'cc'; }) || '';
+      data.appData.bcc = _.find(emailProviderData.to, function(o) { return o.type === 'bcc'; }) || '';
+    } else if (data.app === 'googlechrome.website') {
+      data.appData.url = $('#' + externalAppValueMap[appAction]).val();
+    } else {
+      var urlValue = $('#' + externalAppValueMap[appAction]).val();
+      var result;
+
+      data.appData.fullUrl = urlValue;
+      if (appAction === "gdocs.document" || appAction === "gdocs.spreadsheet" || appAction === "gdocs.presentation") {
+        result = urlValue.match(/\/d\/([A-z0-9-_]+)/);
+        data.appData.id = result.length && result[1];
+      }
+
+      if (appAction === "gdrive.folder") {
+        result = urlValue.match(/folders\/([A-z0-9-_]+)/);
+        data.appData.id = result.length && result[1];
+      }
+
+      if (appAction === "gdrive.file") {
+        result = urlValue.match(/open\?.?id=([A-z0-9-_]+)/);
+        data.appData.id = result.length && result[1];
+      }
+    }
+  }
+
+  if (data.url && !data.url.match(/^[A-z]+:/i)) {
+    data.url = 'http://' + data.url;
+  }
+
+  if (['document', 'video'].indexOf(data.action) !== -1) {
+    if (files.toRemove) {
+      data.files = {};
+    } else {
+      data.files = _.isEmpty(files.selectedFiles) ? files : files.selectedFiles;
+    }
+  }
+
+  // cleanup
+  ['url', 'query', 'page'].forEach(function(key) {
+    if (data[key] === '') {
+      delete data[key];
+    }
+  });
+
+  if (notifyComplete) {
+    // TODO: validate query
+    Fliplet.Widget.save(data).then(function() {
+      Fliplet.Widget.complete();
+    });
+  } else {
+    Fliplet.Widget.save(data).then(function() {
+      Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
+    });
+  }
+}
+
+function initializeData() {
+  if (widgetInstanceData.action) {
+    fields.forEach(function(fieldId) {
+      $('#' + fieldId).val(widgetInstanceData[fieldId]).trigger('change');
+      Fliplet.Widget.autosize();
+    });
+
+    if (widgetInstanceData.action === 'app' && widgetInstanceData.app) {
+      $appAction.val(widgetInstanceData.app);
+      $appAction.trigger('change');
+      var url = widgetInstanceData.appData.fullUrl || widgetInstanceData.appData.url;
+      if (widgetInstanceData.appData && url) {
+        $('#' + externalAppValueMap[widgetInstanceData.app]).val(url);
+      }
+    }
+    $('.spinner-holder').removeClass('animated');
+    return;
+  }
+
+  $('.spinner-holder').removeClass('animated');
+  $('#transition').val(defaultTransitionVal).trigger('change')
+}
+
 // Only Fliplet, "Colgate" and "Hills Pet Nutirition" can see the "Open app" feature while it's on beta
 Fliplet.Organizations.get().then(function (organizations) {
   var valid = organizations.some(function (org) {
@@ -170,14 +282,12 @@ $appAction.on('change', function onAppActionChange() {
 });
 
 $('#add-query').on('click', function() {
-  $(this).addClass('hidden');
-  $(this).parents('#screen-form').addClass('show-query');
-  Fliplet.Widget.autosize();
+  showPageQuery();
 });
 
 $('#query').on('change', function() {
-  if ($(this).val() !== '') {
-    $('#add-query').trigger('click');
+  if ($(this).val() === '') {
+    showPageQuery();
   }
 });
 
@@ -270,125 +380,21 @@ Fliplet.Widget.onCancelRequest(function() {
   }
 });
 
-// Save data when submitting the form
-function save(notifyComplete) {
-  // Clean data to store the new saved values
-  var data = {};
-
-  // Attach options from widgetInstanceData
-  data.options = widgetInstanceData.options;
-
-  // Get and save values to data
-  fields.forEach(function(fieldId) {
-    data[fieldId] = $('#' + fieldId).val();
+Fliplet.Pages.get().then(function(pages) {
+  pages = pages || [];
+  var options = [];
+  pages.forEach(function(page) {
+    options.push([
+      '<option value="' + page.id + '"',
+      (widgetInstanceData.page === page.id.toString() ? ' selected' : ''),
+      '>' + page.title + '</option>'
+    ].join(''));
   });
+  $('#page').append(options.join(''));
 
-  var appAction = $appAction.val();
-  if (data.action === 'app' && appAction) {
-    data.app = appAction;
-    data.appData = {};
+  initializeData();
 
-    if (data.app === "gmail.compose") {
-      data.appData.untouchedData = emailProviderData
-      data.appData.body = emailProviderData.html
-      data.appData.subject = emailProviderData.subject
-      
-      // All recipients are found in the "emailProviderData.to" array, but with "type"
-      // defining whether they are "to" or "cc" or "bcc" recipients.
-      data.appData.to = _.find(emailProviderData.to, function(o) { return o.type === 'to'; }) || '';
-      data.appData.cc = _.find(emailProviderData.to, function(o) { return o.type === 'cc'; }) || '';
-      data.appData.bcc = _.find(emailProviderData.to, function(o) { return o.type === 'bcc'; }) || '';
-    } else if (data.app === 'googlechrome.website') {
-      data.appData.url = $('#' + externalAppValueMap[appAction]).val();
-    } else {
-      var urlValue = $('#' + externalAppValueMap[appAction]).val();
-      var result;
-
-      data.appData.fullUrl = urlValue;
-      if (appAction === "gdocs.document" || appAction === "gdocs.spreadsheet" || appAction === "gdocs.presentation") {
-        result = urlValue.match(/\/d\/([A-z0-9-_]+)/);
-        data.appData.id = result.length && result[1];
-      }
-
-      if (appAction === "gdrive.folder") {
-        result = urlValue.match(/folders\/([A-z0-9-_]+)/);
-        data.appData.id = result.length && result[1];
-      }
-
-      if (appAction === "gdrive.file") {
-        result = urlValue.match(/open\?.?id=([A-z0-9-_]+)/);
-        data.appData.id = result.length && result[1];
-      }
-    }
-  }
-
-  if (data.url && !data.url.match(/^[A-z]+:/i)) {
-    data.url = 'http://' + data.url;
-  }
-
-  if (['document', 'video'].indexOf(data.action) !== -1) {
-    if (files.toRemove) {
-      data.files = {};
-    } else {
-      data.files = _.isEmpty(files.selectedFiles) ? files : files.selectedFiles;
-    }
-  }
-
-  // cleanup
-  ['url', 'query', 'page'].forEach(function(key) {
-    if (data[key] === '') {
-      delete data[key];
-    }
-  });
-
-  if (notifyComplete) {
-    // TODO: validate query
-    Fliplet.Widget.save(data).then(function() {
-      Fliplet.Widget.complete();
-    });
-  } else {
-    Fliplet.Widget.save(data).then(function() {
-      Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
-    });
-  }
-}
-
-function initialiseData() {
-  if (widgetInstanceData.action) {
-    fields.forEach(function(fieldId) {
-      $('#' + fieldId).val(widgetInstanceData[fieldId]).trigger('change');
-      Fliplet.Widget.autosize();
-    });
-
-    if (widgetInstanceData.action === 'app' && widgetInstanceData.app) {
-      $appAction.val(widgetInstanceData.app);
-      $appAction.trigger('change');
-      var url = widgetInstanceData.appData.fullUrl || widgetInstanceData.appData.url;
-      if (widgetInstanceData.appData && url) {
-        $('#' + externalAppValueMap[widgetInstanceData.app]).val(url);
-      }
-    }
-    $('.spinner-holder').removeClass('animated');
-    return;
-  }
-
-  $('.spinner-holder').removeClass('animated');
-  $('#transition').val(defaultTransitionVal).trigger('change')
-}
-
-Fliplet.Pages.get()
-  .then(function(pages) {
-    var $select = $('#page');
-    (pages || []).forEach(function(page) {
-      $select.append(
-        '<option value="' + page.id + '"' +
-        (widgetInstanceData.page === page.id.toString() ? ' selected' : '') +
-        '>' + page.title + '</option>'
-      );
-    });
-
-    return Promise.resolve();
-  })
-  .then(initialiseData);
+  return Promise.resolve();
+});
 
 Fliplet.Widget.autosize();
