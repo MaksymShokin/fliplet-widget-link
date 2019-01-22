@@ -37,7 +37,8 @@ body {
 }
 
 #screen-action-form,
-#custom-screen-query {
+#custom-screen-query,
+#screen-form.show-custom-query #another-field {
   height: 0;
   opacity: 0;
   overflow: hidden;
@@ -53,7 +54,8 @@ body {
 }
 
 #screen-form.show-screen-action #screen-action-form,
-#screen-form.show-custom-query #custom-screen-query {
+#screen-form.show-custom-query #custom-screen-query,
+#another-field {
   display: block;
   opacity: 1;
   overflow: visible;

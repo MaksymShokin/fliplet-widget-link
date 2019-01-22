@@ -62,7 +62,8 @@ var screenActions = [
     actions: [
       {
         value: 'accordionOpenTitle',
-        label: 'Open accordion (by title)'
+        label: 'Open accordion (by title)',
+        selected: true
       },
       {
         value: 'accordionOpenIndex',
@@ -449,7 +450,9 @@ Fliplet.Pages.get().then(function(pages) {
     screenActionOptions.push('<optgroup label="' + screenActionGroup.group + '">');
     actions.forEach(function (action) {
       screenActionOptions.push([
-        '<option value="' + action.value + '">',
+        '<option value="' + action.value + '"',
+        (action.selected ? ' selected' : ''),
+        '>',
         action.label,
         '</option>'
       ].join(''));
