@@ -56,9 +56,56 @@ var emailProviderData = $.extend(true, {
   to: []
 }, widgetInstanceData.appData ? widgetInstanceData.appData.untouchedData : {});
 
-function showPageQuery() {
-  $('#add-query').addClass('hidden');
-  $('#screen-form').addClass('show-query');
+var screenActions = [
+  {
+    group: 'Accordion',
+    actions: [
+      {
+        value: 'accordionOpenTitle',
+        label: 'Open accordion (by title)'
+      },
+      {
+        value: 'accordionOpenIndex',
+        label: 'Open accordion (by index)'
+      }
+    ]
+  },
+  {
+    group: 'Directory',
+    actions: [
+      {
+        value: 'directoryLoadFilter',
+        label: 'Load directory with a filter'
+      },
+      {
+        value: 'directoryLoadSearch',
+        label: 'Load directory with a search'
+      },
+      {
+        value: 'directoryLoadFilterMode',
+        label: 'Load directory in filter mode'
+      }
+    ]
+  },
+  {
+    group: 'Custom',
+    actions: [
+      {
+        value: 'customQuery',
+        label: 'Custom query parameters'
+      }
+    ]
+  }
+];
+
+function showScreenActions() {
+  $('#add-action').addClass('hidden');
+  $('#screen-form').addClass('show-screen-action');
+  Fliplet.Widget.autosize();
+}
+
+function toggleCustomQuery(show) {
+  $('#screen-form')[show ? 'addClass' : 'removeClass']('show-custom-query');
   Fliplet.Widget.autosize();
 }
 
@@ -281,13 +328,17 @@ $appAction.on('change', function onAppActionChange() {
   Fliplet.Widget.autosize();
 });
 
-$('#add-query').on('click', function() {
-  showPageQuery();
+$('#add-action').on('click', function() {
+  showScreenActions();
+});
+
+$('#query-action').on('change', function () {
+  toggleCustomQuery($(this).val() === 'customQuery');
 });
 
 $('#query').on('change', function() {
   if ($(this).val() === '') {
-    showPageQuery();
+    showScreenActions();
   }
 });
 
@@ -382,15 +433,30 @@ Fliplet.Widget.onCancelRequest(function() {
 
 Fliplet.Pages.get().then(function(pages) {
   pages = pages || [];
-  var options = [];
+  var pageOptions = [];
+  var screenActionOptions = [];
   pages.forEach(function(page) {
-    options.push([
+    pageOptions.push([
       '<option value="' + page.id + '"',
       (widgetInstanceData.page === page.id.toString() ? ' selected' : ''),
       '>' + page.title + '</option>'
     ].join(''));
   });
-  $('#page').append(options.join(''));
+  $('#page').append(pageOptions.join(''));
+
+  screenActions.forEach(function (screenActionGroup) {
+    var actions = screenActionGroup.actions || [];
+    screenActionOptions.push('<optgroup label="' + screenActionGroup.group + '">');
+    actions.forEach(function (action) {
+      screenActionOptions.push([
+        '<option value="' + action.value + '">',
+        action.label,
+        '</option>'
+      ].join(''));
+    });
+    screenActionOptions.push('</optgroup>');
+  });
+  $('#query-action').append(screenActionOptions.join(''));
 
   initializeData();
 
