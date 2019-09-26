@@ -149,7 +149,8 @@ $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
-
+ 
+  save();
   /*Fliplet.Widget.emit(validInputEventName, {
     isValid: selectedValue !== 'none'
   });*/
@@ -349,6 +350,7 @@ function save(notifyComplete) {
   } else {
     Fliplet.Widget.save(data).then(function() {
       Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
+      Fliplet.Studio.emit('widget-data', data);
     });
   }
 }
