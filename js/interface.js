@@ -150,7 +150,7 @@ $('#action').on('change', function onLinkTypeChange() {
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
  
-  save();
+  Fliplet.Studio.emit('widget-changed');
   /*Fliplet.Widget.emit(validInputEventName, {
     isValid: selectedValue !== 'none'
   });*/
@@ -350,7 +350,6 @@ function save(notifyComplete) {
   } else {
     Fliplet.Widget.save(data).then(function() {
       Fliplet.Studio.emit('reload-widget-instance', widgetInstanceId);
-      Fliplet.Studio.emit('widget-data', data);
     });
   }
 }
