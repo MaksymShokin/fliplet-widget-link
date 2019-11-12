@@ -149,7 +149,7 @@ $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
- 
+
   Fliplet.Studio.emit('widget-changed');
   /*Fliplet.Widget.emit(validInputEventName, {
     isValid: selectedValue !== 'none'
@@ -293,7 +293,7 @@ function save(notifyComplete) {
       data.appData.untouchedData = emailProviderData
       data.appData.body = emailProviderData.html
       data.appData.subject = emailProviderData.subject
-      
+
       // All recipients are found in the "emailProviderData.to" array, but with "type"
       // defining whether they are "to" or "cc" or "bcc" recipients.
       data.appData.to = _.find(emailProviderData.to, function(o) { return o.type === 'to'; }) || '';
@@ -381,6 +381,12 @@ Fliplet.Pages.get()
   .then(function(pages) {
     var $select = $('#page');
     (pages || []).forEach(function(page) {
+      var pageIsOmited = _.some(widgetInstanceData.omitPages, function(omittedPage) {
+        return omittedPage === page.id;
+      });
+      if (pageIsOmited) {
+        return;
+      }
       $select.append(
         '<option value="' + page.id + '"' +
         (widgetInstanceData.page === page.id.toString() ? ' selected' : '') +
