@@ -278,6 +278,7 @@ function save(notifyComplete) {
 
   // Attach options from widgetInstanceData
   data.options = widgetInstanceData.options;
+  data.omitPages = widgetInstanceData.omitPages;
 
   // Get and save values to data
   fields.forEach(function(fieldId) {
