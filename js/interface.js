@@ -91,9 +91,9 @@ Object.keys(btnSelector).forEach(function(key, index) {
     e.preventDefault();
 
     if ($(this).hasClass('add-document')) {
-      config.type = 'document'
+      config.type = 'document';
     } else if ($(this).hasClass('add-video')) {
-      config.type = 'video'
+      config.type = 'video';
     }
 
     Fliplet.Widget.toggleSaveButton(Object.keys(config.selectedFiles).length > 0);
@@ -149,6 +149,22 @@ $('#action').on('change', function onLinkTypeChange() {
   var selectedValue = $(this).val();
   $('.section.show').removeClass('show');
   $('#' + selectedValue + 'Section').addClass('show');
+
+  var fileType = files.contentType ? files.contentType.split('/')[0] : '';
+
+  // this is used to clear uploaded file if user changes link type
+  if (!_.isEmpty(files.selectedFiles) || (selectedValue === 'document' && fileType !== 'application') || (selectedValue === 'video' && fileType !== 'video')) {
+    files.selectedFiles = {};
+    files.selectFiles = [];
+
+    var items = ['document', 'video'];
+
+    items.forEach(function (item) {
+      $('.' + item + ' .add-' + item).text('Browse your media library');
+      $('.' + item + ' .info-holder').addClass('hidden');
+      $('.' + item + ' .file-title span').text('');
+    });
+  }
 
   Fliplet.Studio.emit('widget-changed');
   /*Fliplet.Widget.emit(validInputEventName, {
