@@ -1,7 +1,6 @@
 var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 var customAppsList = Fliplet.Navigate.Apps.list();
-var validInputEventName = 'interface-validate';
 var defaultTransitionVal = 'fade';
 
 var fields = [
@@ -25,12 +24,11 @@ var externalAppValueMap = {
   'gsheets.spreadsheet': 'appGoogleSheets',
   'gslides.presentation': 'appGooglePresentation',
   'gmail.compose': 'appGmail',
-  'googlechrome.website': 'appGoogleChromeWebsite',
-}
+  'googlechrome.website': 'appGoogleChromeWebsite'
+};
 
 var emailTemplateAddProvider;
 var providerInstance;
-var currentMode = null;
 var files = $.extend(widgetInstanceData.files, {
   selectedFiles: {},
   selectFiles: [], // To use the restore on File Picker
@@ -57,8 +55,8 @@ var emailProviderData = $.extend(true, {
 }, widgetInstanceData.appData ? widgetInstanceData.appData.untouchedData : {});
 
 // Only Fliplet, "Colgate" and "Hills Pet Nutirition" can see the "Open app" feature while it's on beta
-Fliplet.Organizations.get().then(function (organizations) {
-  var valid = organizations.some(function (org) {
+Fliplet.Organizations.get().then(function(organizations) {
+  var valid = organizations.some(function(org) {
     return [8, 64, 70].indexOf(org.id) !== -1 || org.name.toLowerCase().indexOf('fliplet') !== -1;
   });
 
@@ -84,7 +82,7 @@ Object.keys(customAppsList).forEach(function(appName) {
   }
 });
 
-Object.keys(btnSelector).forEach(function(key, index) {
+Object.keys(btnSelector).forEach(function(key) {
   var selector = btnSelector[key];
 
   $(selector).on('click', function(e) {
@@ -159,7 +157,7 @@ $('#action').on('change', function onLinkTypeChange() {
 
     var items = ['document', 'video'];
 
-    items.forEach(function (item) {
+    items.forEach(function(item) {
       $('.' + item + ' .add-' + item).text('Browse your media library');
       $('.' + item + ' .info-holder').addClass('hidden');
       $('.' + item + ' .file-title span').text('');
@@ -167,7 +165,8 @@ $('#action').on('change', function onLinkTypeChange() {
   }
 
   Fliplet.Studio.emit('widget-changed');
-  /*Fliplet.Widget.emit(validInputEventName, {
+
+  /* Fliplet.Widget.emit(validInputEventName, {
     isValid: selectedValue !== 'none'
   });*/
 
@@ -305,10 +304,10 @@ function save(notifyComplete) {
     data.app = appAction;
     data.appData = {};
 
-    if (data.app === "gmail.compose") {
-      data.appData.untouchedData = emailProviderData
-      data.appData.body = emailProviderData.html
-      data.appData.subject = emailProviderData.subject
+    if (data.app === 'gmail.compose') {
+      data.appData.untouchedData = emailProviderData;
+      data.appData.body = emailProviderData.html;
+      data.appData.subject = emailProviderData.subject;
 
       // All recipients are found in the "emailProviderData.to" array, but with "type"
       // defining whether they are "to" or "cc" or "bcc" recipients.
@@ -322,17 +321,17 @@ function save(notifyComplete) {
       var result;
 
       data.appData.fullUrl = urlValue;
-      if (appAction === "gdocs.document" || appAction === "gdocs.spreadsheet" || appAction === "gdocs.presentation") {
+      if (appAction === 'gdocs.document' || appAction === 'gdocs.spreadsheet' || appAction === 'gdocs.presentation') {
         result = urlValue.match(/\/d\/([A-z0-9-_]+)/);
         data.appData.id = result.length && result[1];
       }
 
-      if (appAction === "gdrive.folder") {
+      if (appAction === 'gdrive.folder') {
         result = urlValue.match(/folders\/([A-z0-9-_]+)/);
         data.appData.id = result.length && result[1];
       }
 
-      if (appAction === "gdrive.file") {
+      if (appAction === 'gdrive.file') {
         result = urlValue.match(/open\?.?id=([A-z0-9-_]+)/);
         data.appData.id = result.length && result[1];
       }
@@ -390,7 +389,7 @@ function initialiseData() {
   }
 
   $('.spinner-holder').removeClass('animated');
-  $('#transition').val(defaultTransitionVal).trigger('change')
+  $('#transition').val(defaultTransitionVal).trigger('change');
 }
 
 Fliplet.Pages.get()
