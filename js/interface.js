@@ -2,6 +2,7 @@ var widgetInstanceId = $('[data-widget-id]').data('widget-id');
 var widgetInstanceData = Fliplet.Widget.getData(widgetInstanceId) || {};
 var customAppsList = Fliplet.Navigate.Apps.list();
 var defaultTransitionVal = 'fade';
+var selectDefaultPage = true;
 
 var fields = [
   'linkLabel',
@@ -385,23 +386,32 @@ function initialiseData() {
       }
     }
     $('.spinner-holder').removeClass('animated');
+    selectDefaultPage && $('#page').val('defaultSelect');
     return;
   }
 
   $('.spinner-holder').removeClass('animated');
+  selectDefaultPage && $('#page').val('defaultSelect');
   $('#transition').val(defaultTransitionVal).trigger('change');
 }
 
 Fliplet.Pages.get()
   .then(function(pages) {
     var $select = $('#page');
+
     (pages || []).forEach(function(page) {
       var pageIsOmited = _.some(widgetInstanceData.omitPages, function(omittedPage) {
         return omittedPage === page.id;
       });
+
       if (pageIsOmited) {
         return;
       }
+
+      if (widgetInstanceData.page) {
+        selectDefaultPage = false;
+      }
+
       $select.append(
         '<option value="' + page.id + '"' +
         (widgetInstanceData.page === page.id.toString() ? ' selected' : '') +
