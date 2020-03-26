@@ -386,13 +386,20 @@ function initialiseData() {
       }
     }
     $('.spinner-holder').removeClass('animated');
-    selectDefaultPage && $('#page').val('defaultSelect');
+
+    if (selectDefaultPage) {
+      $('#page').val('none');
+    }
+
     return;
   }
 
   $('.spinner-holder').removeClass('animated');
-  selectDefaultPage && $('#page').val('defaultSelect');
   $('#transition').val(defaultTransitionVal).trigger('change');
+
+  if (selectDefaultPage) {
+    $('#page').val('none');
+  }
 }
 
 Fliplet.Pages.get()
